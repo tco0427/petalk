@@ -5,7 +5,6 @@ public enum Emotion {
     growling,
     hissing,
     meowing,
-    noise,
     purring,
     trilling,
     yelling
