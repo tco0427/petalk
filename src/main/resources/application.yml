@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: dongkyu
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
