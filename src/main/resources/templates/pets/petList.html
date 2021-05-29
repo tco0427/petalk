@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>펫 이름</th>
+                <th>펫 성별</th>
+                <th>펫 종</th>
+                <th>펫 나이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.petName}"></td>
+                <td th:text="${pet.gender}"></td>
+                <td th:text="${pet.petType}"></td>
+                <td th:text="${pet.petAge}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
