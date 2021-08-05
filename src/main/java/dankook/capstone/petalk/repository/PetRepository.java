@@ -2,14 +2,15 @@ package dankook.capstone.petalk.repository;
 
 import dankook.capstone.petalk.domain.Pet;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class PetRepository {
+public interface PetRepository extends JpaRepository<Pet,Long> {
+/*
     private final EntityManager em;
 
     public void save(Pet pet){
@@ -29,4 +30,6 @@ public class PetRepository {
                 .setParameter("id",id)
                 .getResultList();
     }
+
+*/
 }

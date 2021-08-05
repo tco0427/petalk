@@ -30,7 +30,7 @@ public class MemberController {
         }
         Member member=new Member();
 
-        member.setId(memberForm.getId());
+        member.setUserId(memberForm.getId());
         member.setPassword(memberForm.getPassword());
         member.setName(memberForm.getName());
         member.setEmail(memberForm.getEmail());

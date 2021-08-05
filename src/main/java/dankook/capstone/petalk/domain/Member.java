@@ -3,18 +3,21 @@ package dankook.capstone.petalk.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.GenerationType.*;
+
 @Entity
 @Getter @Setter
 public class Member {
-    @Id
-    private String id;
+
+    @Id @GeneratedValue(strategy = IDENTITY)
+    private Long id;
+
+    private String userId;
 
     private String password;
 

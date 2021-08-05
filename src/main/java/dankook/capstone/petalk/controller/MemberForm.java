@@ -10,6 +10,7 @@ import java.io.File;
 @Getter
 @Setter
 public class MemberForm {
+
     @NotEmpty(message="아이디는 필수 입니다.")
     private String id;
     @NotEmpty(message="비밀번호는 필수 입니다.")
