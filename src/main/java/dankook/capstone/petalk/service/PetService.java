@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -29,7 +30,7 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet findOne(Long petId){
-        return petRepository.findOne(petId);
+    public Optional<Pet> findOne(Long petId){
+        return petRepository.findById(petId);
     }
 }

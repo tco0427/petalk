@@ -40,7 +40,7 @@ public class PetController {
          * 여기서부터
          */
         Member member=new Member();
-        member.setId("tco1498");
+//        member.setId("tco1498");
         pet.setMember(member);
         /**
          * 여기는 불필요한 부분
