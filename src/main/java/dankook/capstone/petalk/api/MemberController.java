@@ -7,6 +7,7 @@ import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +83,37 @@ public class MemberController {
     /**
      * 회원 조회
      */
+
+    @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
+    @GetMapping("/{id}")
+    public ResponseData<MemberDto> getMemberById(@ApiParam("회원 id") @PathVariable("id") Long id){
+        log.info("getMemberById : " + id);
+
+        ResponseData<MemberDto> responseData = null;
+
+        MemberDto memberDto = null;
+
+        try{
+            Member member = memberService.findOne(id).get();
+            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
+            log.info(responseData.toString());
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, memberDto);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto{
+        private String userId;
+        private String name;
+        private String email;
+    }
 
     /**
      * 회원 수정
