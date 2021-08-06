@@ -6,13 +6,13 @@ import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,29 +30,31 @@ public class MemberController {
     /**
      * 회원 생성
      */
+    @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/new")
     public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request){
-        ResponseData<CreateMemberResponse> responseData = null;
+        ResponseData<CreateMemberResponse> responseData;
         CreateMemberResponse createMemberResponse = null;
 
         try{
+
             Member member = new Member();
             member.setUserId(request.getUserId());
             member.setName(request.getName());
             member.setPassword(request.getPassword());
-            member.setProfile(request.getProfile());
+            member.setProfileUrl(request.getProfileUrl());
             member.setEmail(request.getEmail());
             member.setPetList(request.getPetList());
 
             Long id = memberService.join(member);
-            createMemberResponse = new CreateMemberResponse(member.getId(),member.getUserId(),member.getName(),member.getEmail());
+
+            createMemberResponse = new CreateMemberResponse(id,member.getUserId(),member.getName(),member.getEmail());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,createMemberResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.FAIL,createMemberResponse);
+
         }catch(Exception e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL,createMemberResponse);
             log.error(e.getMessage());
         }
-
         return responseData;
     }
 
@@ -72,9 +74,11 @@ public class MemberController {
         private String password;
         private String name;
         private String email;
-        private File profile;
+        private String profileUrl;
         private List<Pet> petList=new ArrayList<>();
     }
+
+
     /**
      * 회원 조회
      */

@@ -25,7 +25,8 @@ public class Member {
 
     private String email;
 
-    private File profile;
+    private String profileUrl;
+
     @OneToMany(mappedBy = "member")
     private List<Pet> petList=new ArrayList<>();
 }
