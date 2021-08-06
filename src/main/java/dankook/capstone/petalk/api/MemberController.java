@@ -33,11 +33,11 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/new")
-    public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request){
+    public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request) {
         ResponseData<CreateMemberResponse> responseData;
         CreateMemberResponse createMemberResponse = null;
 
-        try{
+        try {
 
             Member member = new Member();
             member.setUserId(request.getUserId());
@@ -49,9 +49,12 @@ public class MemberController {
 
             Long id = memberService.join(member);
 
-            createMemberResponse = new CreateMemberResponse(id,member.getUserId(),member.getName(),member.getEmail());
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,createMemberResponse);
+            createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail());
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createMemberResponse);
 
+        }catch(IllegalStateException e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, createMemberResponse);
+            log.error(e.getMessage());
         }catch(Exception e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL,createMemberResponse);
             log.error(e.getMessage());
