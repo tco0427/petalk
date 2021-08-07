@@ -121,6 +121,45 @@ public class MemberController {
     /**
      * 회원 수정
      */
+    @ApiOperation(value = "", notes = "회원 정보 수정")
+    @PutMapping("/{id}")
+    public ResponseData<UpdateMemberResponse> updateMember(@PathVariable("id") Long id,
+                                                           @RequestBody @Valid UpdateMemberRequest request){
+        ResponseData<UpdateMemberResponse> responseData = null;
+        UpdateMemberResponse updateMemberResponse = null;
+
+        try{
+            memberService.update(id,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
+            Member member = memberService.findOne(id).get();
+
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, updateMemberResponse);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    @Data
+    static class UpdateMemberRequest{
+        private String name;
+        private String password;
+        private String email;
+        private String profileUrl;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateMemberResponse{
+        private Long id;
+        private String name;
+        private String password;
+        private String email;
+        private String profileUrl;
+    }
 
     /**
      * 회원 삭제
