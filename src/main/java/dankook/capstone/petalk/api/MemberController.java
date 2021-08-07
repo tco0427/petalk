@@ -164,6 +164,24 @@ public class MemberController {
     /**
      * 회원 삭제
      */
+    @ApiOperation(value = "", notes = "회원 정보 삭제")
+    @DeleteMapping("/{id}")
+    public ResponseData<DeleteMemberDto> deleteMember(@PathVariable("id") Long id){
+        ResponseData<DeleteMemberDto> responseData = null;
+        try{
+            memberService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(id));
+        }catch(Exception e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(id));
+            log.error(e.getMessage());
+        }
+        return responseData;
+    }
 
+    @Data
+    @AllArgsConstructor
+    static class DeleteMemberDto{
+        private Long id;
+    }
 
 }

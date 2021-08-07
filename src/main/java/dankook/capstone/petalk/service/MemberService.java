@@ -48,5 +48,9 @@ public class MemberService {
         member.setProfileUrl(profileUrl);
         member.setUpdatedAt((int) System.currentTimeMillis());
     }
+
+    public void deleteById(Long id){
+        memberRepository.deleteById(id);
+    }
 }
 
