@@ -33,11 +33,11 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/new")
-    public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request){
+    public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request) {
         ResponseData<CreateMemberResponse> responseData;
         CreateMemberResponse createMemberResponse = null;
 
-        try{
+        try {
 
             Member member = new Member();
             member.setUserId(request.getUserId());
@@ -49,9 +49,12 @@ public class MemberController {
 
             Long id = memberService.join(member);
 
-            createMemberResponse = new CreateMemberResponse(id,member.getUserId(),member.getName(),member.getEmail());
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,createMemberResponse);
+            createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail());
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createMemberResponse);
 
+        }catch(IllegalStateException e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, createMemberResponse);
+            log.error(e.getMessage());
         }catch(Exception e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL,createMemberResponse);
             log.error(e.getMessage());
@@ -118,10 +121,67 @@ public class MemberController {
     /**
      * 회원 수정
      */
+    @ApiOperation(value = "", notes = "회원 정보 수정")
+    @PutMapping("/{id}")
+    public ResponseData<UpdateMemberResponse> updateMember(@PathVariable("id") Long id,
+                                                           @RequestBody @Valid UpdateMemberRequest request){
+        ResponseData<UpdateMemberResponse> responseData = null;
+        UpdateMemberResponse updateMemberResponse = null;
+
+        try{
+            memberService.update(id,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
+            Member member = memberService.findOne(id).get();
+
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, updateMemberResponse);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    @Data
+    static class UpdateMemberRequest{
+        private String name;
+        private String password;
+        private String email;
+        private String profileUrl;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateMemberResponse{
+        private Long id;
+        private String name;
+        private String password;
+        private String email;
+        private String profileUrl;
+    }
 
     /**
      * 회원 삭제
      */
+    @ApiOperation(value = "", notes = "회원 정보 삭제")
+    @DeleteMapping("/{id}")
+    public ResponseData<DeleteMemberDto> deleteMember(@PathVariable("id") Long id){
+        ResponseData<DeleteMemberDto> responseData = null;
+        try{
+            memberService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(id));
+        }catch(Exception e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(id));
+            log.error(e.getMessage());
+        }
+        return responseData;
+    }
 
+    @Data
+    @AllArgsConstructor
+    static class DeleteMemberDto{
+        private Long id;
+    }
 
 }

@@ -27,6 +27,10 @@ public class Member {
 
     private String profileUrl;
 
+    private Integer createdAt;
+
+    private Integer updatedAt;
+
     @OneToMany(mappedBy = "member")
     private List<Pet> petList=new ArrayList<>();
 }

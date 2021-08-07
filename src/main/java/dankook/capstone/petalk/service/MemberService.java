@@ -38,5 +38,19 @@ public class MemberService {
     public Optional<Member> findOne(Long id){
         return memberRepository.findById(id);
     }
+
+    @Transactional
+    public void update(Long id, String name, String password, String email, String profileUrl){
+        Member member = memberRepository.findById(id).get();
+        member.setName(name);
+        member.setPassword(password);
+        member.setEmail(email);
+        member.setProfileUrl(profileUrl);
+        member.setUpdatedAt((int) System.currentTimeMillis());
+    }
+
+    public void deleteById(Long id){
+        memberRepository.deleteById(id);
+    }
 }
 
