@@ -1,5 +1,6 @@
 package dankook.capstone.petalk.service;
 
+import dankook.capstone.petalk.domain.Gender;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.repository.MemberRepository;
@@ -32,5 +33,14 @@ public class PetService {
 
     public Optional<Pet> findOne(Long petId){
         return petRepository.findById(petId);
+    }
+
+    @Transactional
+    public void update(Long id, String petName, Gender gender, String petType, Integer petAge){
+        Pet pet = petRepository.findById(id).get();
+        pet.setPetName(petName);
+        pet.setGender(gender);
+        pet.setPetType(petType);
+        pet.setPetAge(petAge);
     }
 }

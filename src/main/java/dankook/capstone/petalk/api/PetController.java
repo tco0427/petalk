@@ -13,12 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
 @RequestMapping("/api/pet")
 @RestController
@@ -54,11 +52,8 @@ public class PetController {
 
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createPetResponse);
 
-        }catch(IllegalStateException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, createPetResponse);
-            log.error(e.getMessage());
         }catch(Exception e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL,createPetResponse);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL,createPetResponse);
             log.error(e.getMessage());
         }
         return responseData;
@@ -90,6 +85,45 @@ public class PetController {
     /**
      * 펫 정보 수정
      */
+    @ApiOperation(value = "", notes = "펫 정보 수정")
+    @PutMapping("/{id}")
+    public ResponseData<UpdatePetResponse> updatePet(@PathVariable("id") Long id,
+                                                     @RequestBody @Valid UpdatePetRequest request){
+        ResponseData<UpdatePetResponse> responseData = null;
+        UpdatePetResponse updatePetResponse = null;
+        try{
+            petService.update(id,request.getPetName(),request.getGender(),request.getPetType(),request.getPetAge());
+            Pet pet = petService.findOne(id).get();
+
+            updatePetResponse = new UpdatePetResponse(pet.getId(),pet.getPetName(),pet.getGender(),pet.getPetType(),pet.getPetAge());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updatePetResponse);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_PET,updatePetResponse);
+            log.error(e.getMessage());
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+        return responseData;
+    }
+
+    @Data
+    static class UpdatePetRequest{
+        private String petName;
+        private Gender gender;
+        private String petType;
+        private Integer petAge;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdatePetResponse{
+        private Long id;
+        private String petName;
+        private Gender gender;
+        private String petType;
+        private Integer petAge;
+    }
+
 
     /**
      * 펫 정보 삭제
