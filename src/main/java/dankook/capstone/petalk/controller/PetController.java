@@ -46,7 +46,7 @@ public class PetController {
          * 여기는 불필요한 부분
          */
         System.out.println(pet);
-        petService.registration(pet);
+        petService.join(pet);
 
         return "redirect:/";
     }
