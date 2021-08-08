@@ -20,7 +20,7 @@ public class PetService {
     private final PetRepository petRepository;
 
     @Transactional
-    public Long registration(Pet pet){
+    public Long join(Pet pet){
         petRepository.save(pet);
         return pet.getId();
     }
