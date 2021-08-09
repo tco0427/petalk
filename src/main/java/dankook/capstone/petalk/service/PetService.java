@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class PetService {
 
     private final PetRepository petRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Long join(Pet pet){
@@ -50,6 +52,17 @@ public class PetService {
     }
 
     public List<Pet> findByMemberId(Long id){
-        return petRepository.findByMemberName(id);
+        Member member = memberRepository.findById(id).get();
+        List<Pet> pets = petRepository.findAll();
+
+        List<Pet> result = new ArrayList<>();
+
+        for (Pet pet : pets) {
+            if(pet.getMember().getId() == member.getId()){
+                result.add(pet);
+            }
+        }
+
+        return result;
     }
 }
