@@ -43,4 +43,9 @@ public class PetService {
         pet.setPetType(petType);
         pet.setPetAge(petAge);
     }
+
+    @Transactional
+    public void deleteById(Long id){
+        petRepository.deleteById(id);
+    }
 }

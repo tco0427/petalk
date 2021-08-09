@@ -128,4 +128,23 @@ public class PetController {
     /**
      * 펫 정보 삭제
      */
+    @ApiOperation(value = "", notes = "펫 정보 삭제")
+    @DeleteMapping("/{id}")
+    public ResponseData<DeletePetDto> deletePet(@PathVariable("id") Long id){
+        ResponseData<DeletePetDto> responseData = null;
+        try{
+            petService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(id));
+        }catch(Exception e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(id));
+            log.error(e.getMessage());
+        }
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class DeletePetDto{
+        private Long id;
+    }
 }
