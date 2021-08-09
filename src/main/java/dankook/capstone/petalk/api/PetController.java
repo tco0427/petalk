@@ -107,7 +107,7 @@ public class PetController {
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,petDtoList);
             log.error("Optional Error" + e.getMessage());
         }
-
+        return responseData;
     }
 
     @Getter
@@ -178,6 +178,7 @@ public class PetController {
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(id));
             log.error(e.getMessage());
         }
+        return responseData;
     }
 
 
