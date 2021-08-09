@@ -17,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.LAZY;
 
 @RequestMapping("/api/pet")
 @RestController
@@ -44,7 +47,9 @@ public class PetController {
         try {
             Pet pet = new Pet();
 
-            pet.setMember(request.getMember());
+            Member member = memberService.findOne(request.getMemberId()).get();
+
+            pet.setMember(member);
             pet.setPetName(request.getPetName());
             pet.setGender(request.getGender());
             pet.setPetType(request.getPetType());
@@ -75,7 +80,7 @@ public class PetController {
 
     @Data
     static class CreatePetRequest{
-        private Member member;
+        private Long memberId;
         private String petName;
         private Gender gender;
         private String petType;
@@ -87,24 +92,27 @@ public class PetController {
      */
     @ApiOperation(value = "", notes = "회원 정보로 펫 정보 조회")
     @GetMapping("/{id}")
-    public ResponseData<List<PetDto>> getPetById(@ApiParam("회원 id") @PathVariable("id") Long id){
+    public ResponseData<PetListDto> getPetById(@ApiParam("회원 id") @PathVariable("id") Long id){
         log.info("getPetByMemberId : "+id);
 
-        ResponseData<List<PetDto>> responseData = null;
-        List<PetDto> petDtoList = null;
+        ResponseData<PetListDto> responseData = null;
+        PetListDto petListDto = null;
 
         try{
             Member findMember = memberService.findOne(id).get();
-            List<Pet> petList = petService.findByMemberId(findMember.getId());
+//            List<Pet> petList = petService.findByMemberId(findMember.getId());
+            List<Pet> petList = findMember.getPetList();
 
-            petDtoList = petList.stream()
+            List<PetDto> petDtoList = petList.stream()
                     .map(p -> new PetDto(p))
                     .collect(Collectors.toList());
 
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petDtoList);
+            petListDto = new PetListDto(findMember, petDtoList);
+
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petListDto);
 
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,petDtoList);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,petListDto);
             log.error("Optional Error" + e.getMessage());
         }
         return responseData;
@@ -112,12 +120,29 @@ public class PetController {
 
     @Getter
     static class PetDto{
-        private final Member member;
-        private final String petName;
+        private Long id;
+        private String petName;
+        private Gender gender;
+        private String petType;
+        private Integer petAge;
 
         public PetDto(Pet pet){
-            member = pet.getMember();
+            id = pet.getId();
             petName = pet.getPetName();
+            gender = pet.getGender();
+            petType = pet.getPetType();
+            petAge = pet.getPetAge();
+        }
+    }
+
+    @Getter
+    static class PetListDto{
+        private final Member member;
+        private final List<PetDto> petList;
+
+        public PetListDto(Member member, List<PetDto> petList){
+            this.member = member;
+            this.petList = petList;
         }
     }
 

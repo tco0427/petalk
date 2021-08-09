@@ -1,5 +1,6 @@
 package dankook.capstone.petalk.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +32,7 @@ public class Member {
 
     private Integer updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Pet> petList=new ArrayList<>();
 }

@@ -51,6 +51,7 @@ public class PetService {
         petRepository.deleteById(id);
     }
 
+/*
     public List<Pet> findByMemberId(Long id){
         Member member = memberRepository.findById(id).get();
         List<Pet> pets = petRepository.findAll();
@@ -65,4 +66,5 @@ public class PetService {
 
         return result;
     }
+*/
 }
