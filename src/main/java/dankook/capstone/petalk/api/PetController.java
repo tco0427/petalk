@@ -9,14 +9,18 @@ import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/pet")
 @RestController
@@ -81,6 +85,41 @@ public class PetController {
     /**
      * 펫 정보 조회
      */
+    @ApiOperation(value = "", notes = "회원 정보로 펫 정보 조회")
+    @GetMapping("/{id}")
+    public ResponseData<List<PetDto>> getPetById(@ApiParam("회원 id") @PathVariable("id") Long id){
+        log.info("getPetByMemberId : "+id);
+
+        ResponseData<List<PetDto>> responseData = null;
+        List<PetDto> petDtoList = null;
+
+        try{
+            Member findMember = memberService.findOne(id).get();
+            List<Pet> petList = petService.findByMemberId(findMember.getId());
+
+            petDtoList = petList.stream()
+                    .map(p -> new PetDto(p))
+                    .collect(Collectors.toList());
+
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petDtoList);
+
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,petDtoList);
+            log.error("Optional Error" + e.getMessage());
+        }
+
+    }
+
+    @Getter
+    static class PetDto{
+        private final Member member;
+        private final String petName;
+
+        public PetDto(Pet pet){
+            member = pet.getMember();
+            petName = pet.getPetName();
+        }
+    }
 
     /**
      * 펫 정보 수정
