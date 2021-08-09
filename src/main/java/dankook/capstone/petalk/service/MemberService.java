@@ -49,6 +49,7 @@ public class MemberService {
         member.setUpdatedAt((int) System.currentTimeMillis());
     }
 
+    @Transactional
     public void deleteById(Long id){
         memberRepository.deleteById(id);
     }
