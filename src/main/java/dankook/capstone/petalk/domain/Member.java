@@ -32,7 +32,6 @@ public class Member {
 
     private Integer updatedAt;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Pet> petList=new ArrayList<>();
 }
