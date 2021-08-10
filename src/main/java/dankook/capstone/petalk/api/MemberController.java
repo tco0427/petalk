@@ -45,7 +45,6 @@ public class MemberController {
             member.setPassword(request.getPassword());
             member.setProfileUrl(request.getProfileUrl());
             member.setEmail(request.getEmail());
-            member.setPetList(request.getPetList());
 
             Long id = memberService.join(member);
 
@@ -79,7 +78,6 @@ public class MemberController {
         private String name;
         private String email;
         private String profileUrl;
-        private List<Pet> petList=new ArrayList<>();
     }
 
 

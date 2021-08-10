@@ -21,6 +21,8 @@ public class Community {
     @JoinColumn(name="memberid")
     private Member member;
 
+    private String writer;
+
     private String title;
 
     private String content;
