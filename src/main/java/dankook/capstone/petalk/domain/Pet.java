@@ -1,5 +1,6 @@
 package dankook.capstone.petalk.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ public class Pet {
     @Column(name="petpk")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch= LAZY)
     @JoinColumn(name="memberid")
     private Member member;
