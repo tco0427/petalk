@@ -7,6 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -28,4 +30,6 @@ public class Community {
 
     private File attachment;
 
+    @OneToMany(mappedBy = "community")
+    private List<Comment> commentList=new ArrayList<>();
 }
