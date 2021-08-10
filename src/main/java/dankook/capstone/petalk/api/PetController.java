@@ -107,7 +107,7 @@ public class PetController {
                     .map(p -> new PetDto(p))
                     .collect(Collectors.toList());
 
-            petListDto = new PetListDto(findMember, petDtoList);
+            petListDto = new PetListDto(findMember.getId(), petDtoList);
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petListDto);
 
@@ -137,11 +137,11 @@ public class PetController {
 
     @Getter
     static class PetListDto{
-        private final Member member;
+        private final Long memberId;
         private final List<PetDto> petList;
 
-        public PetListDto(Member member, List<PetDto> petList){
-            this.member = member;
+        public PetListDto(Long memberId, List<PetDto> petList){
+            this.memberId = memberId;
             this.petList = petList;
         }
     }
