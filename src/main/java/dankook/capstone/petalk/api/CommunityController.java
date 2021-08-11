@@ -7,6 +7,7 @@ import dankook.capstone.petalk.domain.Community;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.service.CommunityService;
 import dankook.capstone.petalk.service.MemberService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -132,6 +133,26 @@ public class CommunityController {
      * 게시글 삭제
      */
 
+    @ApiOperation(value = "", notes = "게시글 삭제")
+    @DeleteMapping
+    public ResponseData<DeleteCommunityDto> deleteCommunity(@PathVariable("id") Long id){
+        ResponseData<DeleteCommunityDto> responseData = null;
+
+        try{
+            communityService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteCommunityDto(id));
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_COMMUNITY,new DeleteCommunityDto(id));
+        }
+
+        return  responseData;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class DeleteCommunityDto{
+        private Long id;
+    }
 
     /**
      * 게시글 조회(검색)

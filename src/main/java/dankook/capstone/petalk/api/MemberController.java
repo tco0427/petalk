@@ -169,7 +169,7 @@ public class MemberController {
         try{
             memberService.deleteById(id);
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(id));
-        }catch(Exception e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(id));
             log.error(e.getMessage());
         }
