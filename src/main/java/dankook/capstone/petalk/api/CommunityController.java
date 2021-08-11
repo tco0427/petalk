@@ -12,10 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -28,7 +25,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/community")
 public class CommunityController {
 
-    private final CommunityService communityService;
+    private final CommunityService  communityService;
     private final MemberService memberService;
 
     /**
@@ -41,7 +38,6 @@ public class CommunityController {
         CreateCommunityResponse createCommunityResponse = null;
 
         try{
-
             Community community = new Community();
 
             Member findMember = memberService.findOne(request.getMemberId()).get();
@@ -92,8 +88,56 @@ public class CommunityController {
      * 게시글 내용 수정
      */
 
+    @ApiOperation(value = "", notes = "게시글 수정")
+    @PutMapping
+    public ResponseData<UpdateCommunityResponse> updateCommunity(@PathVariable("id") Long id,
+                                                                 @RequestBody @Valid UpdateCommunityRequest request){
+        ResponseData<UpdateCommunityResponse> responseData = null;
+        UpdateCommunityResponse updateCommunityResponse = null;
+
+        try{
+            communityService.update(id,request.getContent(),request.getAttachment());
+
+            Community community = communityService.findOne(id).get();
+
+            updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent(),community.getAttachment());
+
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateCommunityResponse);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, updateCommunityResponse);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    @Data
+    static class UpdateCommunityRequest{
+        private String content;
+        private File attachment;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateCommunityResponse{
+        private Long id;
+        private Long memberId;
+        private String title;
+        private String content;
+        private File attachment;
+    }
+
     /**
      * 게시글 삭제
      */
 
+
+    /**
+     * 게시글 조회(검색)
+     */
+
+    /**
+     * 게시글 조회(페이징)
+     */
 }
