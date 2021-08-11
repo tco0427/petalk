@@ -199,7 +199,7 @@ public class PetController {
         try{
             petService.deleteById(id);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(id));
-        }catch(Exception e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(id));
             log.error(e.getMessage());
         }
