@@ -90,7 +90,7 @@ public class MemberController {
 
     @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
     @GetMapping("/{id}")
-    public ResponseData<MemberDto> getMemberById(@ApiParam("회원 id") @PathVariable("id") Long id){
+    public ResponseData<MemberDto> getMemberById(@ApiParam(name = "회원 id", required = true, example = "1") @PathVariable("id") Long id){
         log.info("getMemberById : " + id);
 
         ResponseData<MemberDto> responseData = null;

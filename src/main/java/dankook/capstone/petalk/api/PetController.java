@@ -92,7 +92,7 @@ public class PetController {
      */
     @ApiOperation(value = "", notes = "회원 정보로 펫 정보 조회")
     @GetMapping("/{id}")
-    public ResponseData<PetListDto> getPetById(@ApiParam("회원 id") @PathVariable("id") Long id){
+    public ResponseData<PetListDto> getPetById(@ApiParam(name = "회원 id", required = true, example = "1") @PathVariable("id") Long id){
         log.info("getPetByMemberId : "+id);
 
         ResponseData<PetListDto> responseData = null;
