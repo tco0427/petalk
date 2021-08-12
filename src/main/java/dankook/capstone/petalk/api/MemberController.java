@@ -100,7 +100,7 @@ public class MemberController {
 
         try{
             Member member = memberService.findOne(id).get();
-            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname());
+            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname(),member.getPetList());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
             log.info(responseData.toString());
         }catch(NoSuchElementException e){
@@ -119,6 +119,7 @@ public class MemberController {
         private String nickname;
         private String name;
         private String email;
+        private List<Pet> petList;
     }
 
     /**
