@@ -22,5 +22,6 @@ public class Comment {
     private Community community;
 
     private Date date;
+
     private String content;
 }

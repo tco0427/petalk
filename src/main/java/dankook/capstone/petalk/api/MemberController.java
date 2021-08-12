@@ -42,13 +42,14 @@ public class MemberController {
             Member member = new Member();
             member.setUserId(request.getUserId());
             member.setName(request.getName());
+            member.setNickname(request.getNickname());
             member.setPassword(request.getPassword());
             member.setProfileUrl(request.getProfileUrl());
             member.setEmail(request.getEmail());
 
             Long id = memberService.join(member);
 
-            createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail());
+            createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createMemberResponse);
 
         }catch(IllegalStateException e){
@@ -67,6 +68,7 @@ public class MemberController {
     static class CreateMemberResponse{
         private Long id;
         private String userId;
+        private String nickname;
         private String name;
         private String email;
     }
@@ -74,6 +76,7 @@ public class MemberController {
     @Data
     static class CreateMemberRequest{
         private String userId;
+        private String nickname;
         private String password;
         private String name;
         private String email;
@@ -96,7 +99,7 @@ public class MemberController {
 
         try{
             Member member = memberService.findOne(id).get();
-            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail());
+            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
             log.info(responseData.toString());
         }catch(NoSuchElementException e){
@@ -112,6 +115,7 @@ public class MemberController {
     @AllArgsConstructor
     static class MemberDto{
         private String userId;
+        private String nickname;
         private String name;
         private String email;
     }
@@ -130,7 +134,7 @@ public class MemberController {
             memberService.update(id,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
             Member member = memberService.findOne(id).get();
 
-            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl());
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, updateMemberResponse);
@@ -144,6 +148,7 @@ public class MemberController {
     @Data
     static class UpdateMemberRequest{
         private String name;
+        private String nickname;
         private String password;
         private String email;
         private String profileUrl;
@@ -154,6 +159,7 @@ public class MemberController {
     static class UpdateMemberResponse{
         private Long id;
         private String name;
+        private String nickname;
         private String password;
         private String email;
         private String profileUrl;

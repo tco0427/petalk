@@ -1,6 +1,7 @@
 package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.domain.Community;
+import dankook.capstone.petalk.domain.CommunitySearch;
 import dankook.capstone.petalk.domain.Gender;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.repository.CommunityRepository;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
 import java.io.File;
 import java.sql.Date;
 import java.util.List;
@@ -46,4 +46,8 @@ public class CommunityService {
     public void deleteById(Long id){
         communityRepository.deleteById(id);
     }
+
+//    public List<Community> findAll(CommunitySearch communitySearch){
+//      동적쿼리 작성해야함
+//    }
 }
