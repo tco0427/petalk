@@ -35,5 +35,8 @@ public class Member {
     private Integer updatedAt;
 
     @OneToMany(mappedBy = "member")
-    private List<Pet> petList=new ArrayList<>();
+    private List<Pet> petList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Video> videoList = new ArrayList<>();
 }

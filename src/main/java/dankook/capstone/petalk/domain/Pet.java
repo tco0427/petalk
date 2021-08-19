@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -34,6 +37,9 @@ public class Pet {
 
     @Column(name="petage")
     private Integer petAge;
+
+    @OneToMany(mappedBy = "pet")
+    private List<Video> videoList = new ArrayList<>();
 
 
     //==연관관계 메소드==//
