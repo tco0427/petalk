@@ -7,7 +7,6 @@ import dankook.capstone.petalk.domain.Community;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.service.CommunityService;
 import dankook.capstone.petalk.service.MemberService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;

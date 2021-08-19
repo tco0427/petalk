@@ -1,9 +1,6 @@
 package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.domain.Community;
-import dankook.capstone.petalk.domain.CommunitySearch;
-import dankook.capstone.petalk.domain.Gender;
-import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

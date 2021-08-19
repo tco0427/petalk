@@ -1,7 +1,6 @@
 package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.domain.Gender;
-import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.repository.MemberRepository;
 import dankook.capstone.petalk.repository.PetRepository;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
