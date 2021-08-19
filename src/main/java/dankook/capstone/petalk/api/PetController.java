@@ -17,13 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
-import static javax.persistence.FetchType.LAZY;
 
 @RequestMapping("/api/pet")
 @RestController
