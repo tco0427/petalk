@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.File;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter @Setter
 public class Video {
@@ -13,11 +15,11 @@ public class Video {
     @Column(name="videopk")
     private Long id;
 
-    @OneToOne
+    @ManyToOne(fetch= LAZY)
     @JoinColumn(name="petpk")
     private Pet pet;
 
-    @OneToOne
+    @ManyToOne(fetch= LAZY)
     @JoinColumn(name="memberid")
     private Member member;
 
