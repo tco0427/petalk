@@ -8,4 +8,5 @@ public class ResponseMessage {
     public static final String NOT_FOUND_USER = "회원 정보 조회 실패";
     public static final String NOT_FOUND_PET = "펫 정보 조회 실패";
     public static final String NOT_FOUND_COMMUNITY = "게시글 정보 조회 실패";
+    public static final String FAIL_UPLOAD_VIDEO = "비디오 정보 업로드 실패";
 }
