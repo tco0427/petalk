@@ -21,8 +21,9 @@ public class VideoService {
         return video.getId();
     }
 
-    public Optional<Video> findOne(Long videoId){
-        return videoRepository.findById(videoId);
+    public Video findOne(Long videoId){
+        return videoRepository.findById(videoId)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public VideoDto findOneDto(Long id){return videoRepository.findVideo(id);}

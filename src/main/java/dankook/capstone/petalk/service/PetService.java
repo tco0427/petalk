@@ -31,8 +31,9 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Optional<Pet> findOne(Long petId){
-        return petRepository.findById(petId);
+    public Pet findOne(Long petId){
+        return petRepository.findById(petId)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Transactional

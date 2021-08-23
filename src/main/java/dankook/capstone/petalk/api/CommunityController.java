@@ -34,13 +34,13 @@ public class CommunityController {
     @ApiOperation(value = "", notes = "새로운 게시글 생성")
     @PostMapping("/new")
     public ResponseData<CreateCommunityResponse> createCommunity(@RequestBody @Valid CreateCommunityRequest request){
-        ResponseData<CreateCommunityResponse> responseData = null;
-        CreateCommunityResponse createCommunityResponse = null;
+        ResponseData<CreateCommunityResponse> responseData;
+        CreateCommunityResponse createCommunityResponse;
 
         try{
             Community community = new Community();
 
-            Member findMember = memberService.findOne(request.getMemberId()).get();
+            Member findMember = memberService.findOne(request.getMemberId());
 
             String nickname = findMember.getNickname();
 
@@ -55,11 +55,11 @@ public class CommunityController {
 
             createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(),community.getWriter(), community.getTitle(), community.getDate());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommunityResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, createCommunityResponse);
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
             log.error("Can't find Member");
         }catch(Exception e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.COMMUNITY_CREATION_FAIL,createCommunityResponse);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.COMMUNITY_CREATION_FAIL, null);
             log.error(e.getMessage());
         }
 
@@ -93,18 +93,18 @@ public class CommunityController {
     public ResponseData<UpdateCommunityResponse> updateCommunity(@PathVariable("id") Long id,
                                                                  @RequestBody @Valid UpdateCommunityRequest request){
         ResponseData<UpdateCommunityResponse> responseData = null;
-        UpdateCommunityResponse updateCommunityResponse = null;
+        UpdateCommunityResponse updateCommunityResponse;
 
         try{
             communityService.update(id,request.getContent(),request.getAttachment());
 
-            Community community = communityService.findOne(id).get();
+            Community community = communityService.findOne(id);
 
             updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent(),community.getAttachment());
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateCommunityResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, updateCommunityResponse);
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
         }catch(Exception e){
             log.error(e.getMessage());
         }
