@@ -4,8 +4,6 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Emotion;
-import dankook.capstone.petalk.domain.Member;
-import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.domain.Video;
 import dankook.capstone.petalk.dto.VideoDto;
 import dankook.capstone.petalk.service.MemberService;
