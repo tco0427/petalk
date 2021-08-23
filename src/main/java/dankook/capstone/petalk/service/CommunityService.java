@@ -28,8 +28,9 @@ public class CommunityService {
         return communityRepository.findAll();
     }
 
-    public Optional<Community> findOne(Long communityId){
-        return communityRepository.findById(communityId);
+    public Community findOne(Long communityId){
+        return communityRepository.findById(communityId)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Transactional

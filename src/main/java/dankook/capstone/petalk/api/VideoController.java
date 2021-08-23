@@ -7,6 +7,8 @@ import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.domain.Video;
+import dankook.capstone.petalk.service.MemberService;
+import dankook.capstone.petalk.service.PetService;
 import dankook.capstone.petalk.service.VideoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,8 @@ import java.io.File;
 public class VideoController {
 
     private final VideoService videoService;
+    private final MemberService memberService;
+    private final PetService petService;
 
     @ApiOperation(value = "", notes = "동영상 client로부터 받아오기")
     @PostMapping("/upload")
@@ -38,14 +42,14 @@ public class VideoController {
         try{
             Video video = new Video();
 
-            Member member = request.getMember();
-            Pet pet = request.getPet();
+            Long memberId = request.getMemberId();
+            Long petId = request.getPetId();
             File videoData = request.getVideo();
 
-            Emotion emotion = null; // 머신러닝 이용하여 Emotion구해오는 작업 필요
+            Emotion emotion = null; // 머신러닝 이용하여 Emotion 구해오는 작업 필요
 
-            video.setMember(request.getMember());
-            video.setPet(request.getPet());
+            video.setMember(memberService.findOne(memberId));
+            video.setPet(petService.findOne(petId));
             video.setVideo(request.getVideo());
             video.setEmotion(emotion);
 
@@ -70,8 +74,8 @@ public class VideoController {
 
     @Data
     static class UploadVideoRequest{
-        private Pet pet;
-        private Member member;
+        private Long memberId;
+        private Long petId;
         private File video;
     }
 }

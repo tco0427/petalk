@@ -44,7 +44,7 @@ public class PetController {
         try {
             Pet pet = new Pet();
 
-            Member member = memberService.findOne(request.getMemberId()).get();
+            Member member = memberService.findOne(request.getMemberId());
 
             pet.setMember(member);
             pet.setPetName(request.getPetName());
@@ -58,8 +58,11 @@ public class PetController {
 
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createPetResponse);
 
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL, null);
+            log.error(e.getMessage());
         }catch(Exception e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL,createPetResponse);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL, null);
             log.error(e.getMessage());
         }
         return responseData;
@@ -92,11 +95,11 @@ public class PetController {
     public ResponseData<PetListDto> getPetById(@ApiParam(name = "회원 id", required = true, example = "1") @PathVariable("id") Long id){
         log.info("getPetByMemberId : "+id);
 
-        ResponseData<PetListDto> responseData = null;
-        PetListDto petListDto = null;
+        ResponseData<PetListDto> responseData;
+        PetListDto petListDto;
 
         try{
-            Member findMember = memberService.findOne(id).get();
+            Member findMember = memberService.findOne(id);
 //            List<Pet> petList = petService.findByMemberId(findMember.getId());
             List<Pet> petList = findMember.getPetList();
 
@@ -108,8 +111,8 @@ public class PetController {
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petListDto);
 
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,petListDto);
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET, null);
             log.error("Optional Error" + e.getMessage());
         }
         return responseData;
@@ -151,15 +154,15 @@ public class PetController {
     public ResponseData<UpdatePetResponse> updatePet(@PathVariable("id") Long id,
                                                      @RequestBody @Valid UpdatePetRequest request){
         ResponseData<UpdatePetResponse> responseData = null;
-        UpdatePetResponse updatePetResponse = null;
+        UpdatePetResponse updatePetResponse;
         try{
             petService.update(id,request.getPetName(),request.getGender(),request.getPetType(),request.getPetAge());
-            Pet pet = petService.findOne(id).get();
+            Pet pet = petService.findOne(id);
 
             updatePetResponse = new UpdatePetResponse(pet.getId(),pet.getPetName(),pet.getGender(),pet.getPetType(),pet.getPetAge());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updatePetResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_PET,updatePetResponse);
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_PET, null);
             log.error(e.getMessage());
         }catch(Exception e){
             log.error(e.getMessage());
