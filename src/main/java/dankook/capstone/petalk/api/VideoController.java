@@ -7,6 +7,7 @@ import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.domain.Video;
+import dankook.capstone.petalk.dto.VideoDto;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
 import dankook.capstone.petalk.service.VideoService;
@@ -15,10 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -46,12 +44,9 @@ public class VideoController {
             Long petId = request.getPetId();
             File videoData = request.getVideo();
 
-            Emotion emotion = null; // 머신러닝 이용하여 Emotion 구해오는 작업 필요
-
             video.setMember(memberService.findOne(memberId));
             video.setPet(petService.findOne(petId));
-            video.setVideo(request.getVideo());
-            video.setEmotion(emotion);
+            video.setVideo(videoData);
 
             Long id = videoService.save(video);
 
@@ -78,4 +73,28 @@ public class VideoController {
         private Long petId;
         private File video;
     }
+
+    @ApiOperation(value = "", notes = "동영상 client로 전송")
+    @GetMapping("/{videoId}")
+    public ResponseData<VideoDto> getVideo(@PathVariable("videoId") Long videoId){
+        log.info("getVideoById : " + videoId);
+
+        ResponseData<VideoDto> responseData = null;
+        VideoDto videoDto = null;
+
+        try{
+            Video video = videoService.findOne(videoId);
+            videoDto = new VideoDto(video.getId(),video.getVideo(),video.getEmotion());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
+
+        }catch(IllegalArgumentException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_VIDEO,null);
+            log.error(e.getMessage());
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
 }
