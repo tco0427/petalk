@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
-import java.sql.Date;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -48,12 +47,11 @@ public class CommunityController {
             community.setWriter(nickname);
             community.setContent(request.getContent());
             community.setMember(findMember);
-            community.setDate(new Date(System.currentTimeMillis()));
             community.setAttachment(request.getAttachment());
 
             Long id = communityService.register(community);
 
-            createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(),community.getWriter(), community.getTitle(), community.getDate());
+            createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(),community.getWriter(), community.getTitle());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommunityResponse);
         }catch(IllegalArgumentException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
@@ -73,7 +71,6 @@ public class CommunityController {
         private Long memberId;
         private String writer;
         private String title;
-        private Date date;
     }
 
     @Data

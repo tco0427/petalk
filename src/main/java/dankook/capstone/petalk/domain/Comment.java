@@ -17,11 +17,9 @@ public class Comment extends BaseEntity{
     @JoinColumn(name="memberid")
     private Member member;
 
+    private String content;
+
     @ManyToOne
     @JoinColumn(name="communitypk")
     private Community community;
-
-    private Date date;
-
-    private String content;
 }

@@ -49,7 +49,6 @@ public class MemberService {
         member.setPassword(password);
         member.setEmail(email);
         member.setProfileUrl(profileUrl);
-        member.setUpdatedAt((int) System.currentTimeMillis());
     }
 
     @Transactional

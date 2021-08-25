@@ -44,7 +44,6 @@ public class MemberController {
             member.setPassword(request.getPassword());
             member.setProfileUrl(request.getProfileUrl());
             member.setEmail(request.getEmail());
-            member.setCreatedAt((int) System.currentTimeMillis());
 
             Long id = memberService.join(member);
 

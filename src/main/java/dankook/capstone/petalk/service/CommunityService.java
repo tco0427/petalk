@@ -37,7 +37,6 @@ public class CommunityService {
     public void update(Long id, String content, File attachment){
         Community community = communityRepository.findById(id).get();
         community.setContent(content);
-        community.setDate(new Date(System.currentTimeMillis()));
     }
 
     @Transactional
