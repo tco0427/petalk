@@ -1,5 +1,6 @@
 package dankook.capstone.petalk.service;
 
+import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Video;
 import dankook.capstone.petalk.dto.VideoDto;
 import dankook.capstone.petalk.repository.VideoRepository;
@@ -22,6 +23,12 @@ public class VideoService {
     public Video findOne(Long videoId){
         return videoRepository.findById(videoId)
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Transactional
+    public void update(Long id, Emotion emotion){
+        Video video = videoRepository.findById(id).orElse(null);
+        video.setEmotion(emotion);
     }
 
     public VideoDto findOneDto(Long id){return videoRepository.findVideo(id);}
