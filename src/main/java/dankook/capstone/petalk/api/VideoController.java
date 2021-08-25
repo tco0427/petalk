@@ -5,9 +5,11 @@ import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Video;
-import dankook.capstone.petalk.dto.VideoDto;
-import dankook.capstone.petalk.dto.VideoEmotionRequest;
-import dankook.capstone.petalk.dto.VideoEmotionResponse;
+import dankook.capstone.petalk.dto.request.UploadVideoRequest;
+import dankook.capstone.petalk.dto.response.UploadVideoResponse;
+import dankook.capstone.petalk.dto.response.VideoDto;
+import dankook.capstone.petalk.dto.request.VideoEmotionRequest;
+import dankook.capstone.petalk.dto.response.VideoEmotionResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
 import dankook.capstone.petalk.service.VideoService;
@@ -57,21 +59,6 @@ public class VideoController {
             log.error(e.getMessage());
         }
         return responseData;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UploadVideoResponse{
-        private Long id;
-        private File video;
-        private Emotion emotion;
-    }
-
-    @Data
-    static class UploadVideoRequest{
-        private Long memberId;
-        private Long petId;
-        private File video;
     }
 
     @ApiOperation(value = "", notes = "동영상 client로 전송")

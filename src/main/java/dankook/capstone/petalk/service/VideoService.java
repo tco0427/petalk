@@ -2,7 +2,7 @@ package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Video;
-import dankook.capstone.petalk.dto.VideoDto;
+import dankook.capstone.petalk.dto.response.VideoDto;
 import dankook.capstone.petalk.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

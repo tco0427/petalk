@@ -1,4 +1,4 @@
-package dankook.capstone.petalk.dto;
+package dankook.capstone.petalk.dto.request;
 
 import dankook.capstone.petalk.domain.Emotion;
 import lombok.Data;
