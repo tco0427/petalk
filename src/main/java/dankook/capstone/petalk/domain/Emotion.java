@@ -7,5 +7,6 @@ public enum Emotion {
     meowing,
     purring,
     trilling,
-    yelling
+    yelling,
+    fail
 }
