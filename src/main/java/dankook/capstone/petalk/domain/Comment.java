@@ -8,7 +8,7 @@ import java.sql.Date;
 
 @Entity
 @Getter @Setter
-public class Comment {
+public class Comment extends BaseEntity{
     @Id @GeneratedValue
     @Column(name="commentpk")
     private Long id;

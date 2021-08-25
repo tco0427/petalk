@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Community {
+public class Community extends BaseEntity{
     @Id @GeneratedValue
     @Column(name="communitypk")
     private Long id;

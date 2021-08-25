@@ -13,7 +13,7 @@ import static javax.persistence.GenerationType.*;
 
 @Entity
 @Getter @Setter
-public class Member {
+public class Member extends BaseEntity{
 
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -29,10 +29,6 @@ public class Member {
     private String email;
 
     private String profileUrl;
-
-    private Integer createdAt;
-
-    private Integer updatedAt;
 
     @OneToMany(mappedBy = "member")
     private List<Pet> petList = new ArrayList<>();
