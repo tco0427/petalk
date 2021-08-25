@@ -10,7 +10,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
-public class Video {
+public class Video extends BaseEntity{
     @Id @GeneratedValue
     @Column(name="videopk")
     private Long id;
