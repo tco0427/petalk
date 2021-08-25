@@ -27,9 +27,6 @@ public class Community extends BaseEntity{
 
     private String content;
 
-    @Column(name="reportingdate")
-    private Date date;
-
     private File attachment;
 
     @OneToMany(mappedBy = "community")
