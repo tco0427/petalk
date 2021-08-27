@@ -1,19 +1,15 @@
 package dankook.capstone.petalk.dto.response;
 
 import dankook.capstone.petalk.domain.Emotion;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.io.File;
-
 @Data
+@AllArgsConstructor
 public class VideoDto {
     private Long id;
-    private File video;
+    private String fileName;
+    private Long size;
+    private String fileUri;
     private Emotion emotion;
-
-    public VideoDto(Long id, File video, Emotion emotion) {
-        this.id = id;
-        this.video = video;
-        this.emotion = emotion;
-    }
 }

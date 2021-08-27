@@ -32,6 +32,4 @@ public class VideoService {
         Video video = videoRepository.findById(id).orElse(null);
         video.setEmotion(emotion);
     }
-
-    public VideoDto findOneDto(Long id){return videoRepository.findVideo(id);}
 }

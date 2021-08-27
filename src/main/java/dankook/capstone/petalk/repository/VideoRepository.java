@@ -8,8 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VideoRepository extends JpaRepository<Video,Long> {
-    @Query("select new dankook.capstone.petalk.dto.response.VideoDto" +
-            "(v.id, v.video, v.emotion)" +
-            "from Video v")
-    VideoDto findVideo(Long id);
 }
