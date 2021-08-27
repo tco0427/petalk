@@ -111,7 +111,7 @@ public class PetController {
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,petListDto);
 
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET, null);
             log.error("Optional Error" + e.getMessage());
         }
@@ -161,7 +161,7 @@ public class PetController {
 
             updatePetResponse = new UpdatePetResponse(pet.getId(),pet.getPetName(),pet.getGender(),pet.getPetType(),pet.getPetAge());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updatePetResponse);
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_PET, null);
             log.error(e.getMessage());
         }catch(Exception e){

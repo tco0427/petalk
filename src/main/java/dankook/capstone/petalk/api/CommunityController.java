@@ -53,7 +53,7 @@ public class CommunityController {
 
             createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(),community.getWriter(), community.getTitle());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommunityResponse);
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
             log.error("Can't find Member");
         }catch(Exception e){
@@ -100,7 +100,7 @@ public class CommunityController {
             updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent(),community.getAttachment());
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateCommunityResponse);
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
         }catch(Exception e){
             log.error(e.getMessage());

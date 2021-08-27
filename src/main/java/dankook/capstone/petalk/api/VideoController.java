@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.util.NoSuchElementException;
 
 @RestController
 @Slf4j
@@ -74,7 +75,7 @@ public class VideoController {
             videoDto = new VideoDto(video.getId(),video.getVideo(),video.getEmotion());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
 
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_VIDEO,null);
             log.error(e.getMessage());
         }catch(Exception e){
@@ -97,7 +98,7 @@ public class VideoController {
 
             videoEmotionResponse = new VideoEmotionResponse(id, emotion);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoEmotionResponse);
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_VIDEO, null);
             log.error(e.getMessage());
         }catch(Exception e){
