@@ -35,7 +35,7 @@ public class CommunityService {
     }
 
     @Transactional
-    public void update(Long id, String content, File attachment){
+    public void update(Long id, String content){
         Community community = communityRepository.findById(id).get();
         community.setContent(content);
     }

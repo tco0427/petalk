@@ -17,6 +17,8 @@ public class Comment extends BaseEntity{
     @JoinColumn(name="memberid")
     private Member member;
 
+    private String writer;
+
     private String content;
 
     @ManyToOne
