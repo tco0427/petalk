@@ -50,7 +50,7 @@ public class MemberController {
             createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createMemberResponse);
 
-        }catch(IllegalStateException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, createMemberResponse);
             log.error(e.getMessage());
         }catch(Exception e){
@@ -100,7 +100,7 @@ public class MemberController {
             memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname(),member.getPetList());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
             log.info(responseData.toString());
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }catch(Exception e){
             log.error(e.getMessage());
@@ -135,7 +135,7 @@ public class MemberController {
 
             updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
-        }catch(IllegalArgumentException e){
+        }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }catch(Exception e){
             log.error(e.getMessage());

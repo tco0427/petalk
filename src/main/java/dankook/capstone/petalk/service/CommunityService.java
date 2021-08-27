@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.sql.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,7 @@ public class CommunityService {
 
     public Community findOne(Long communityId){
         return communityRepository.findById(communityId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional

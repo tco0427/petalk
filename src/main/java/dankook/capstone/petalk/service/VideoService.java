@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,7 +24,7 @@ public class VideoService {
 
     public Video findOne(Long videoId){
         return videoRepository.findById(videoId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -33,7 +34,7 @@ public class PetService {
 
     public Pet findOne(Long petId){
         return petRepository.findById(petId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional
