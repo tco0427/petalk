@@ -37,26 +37,33 @@ public class VideoController {
     @ApiOperation(value = "", notes = "동영상 client로부터 받아오기")
     @PostMapping("/upload")
     public ResponseData<UploadVideoResponse> uploadVideo(@RequestBody @Valid UploadVideoRequest request){
-        ResponseData<UploadVideoResponse> responseData;
-        UploadVideoResponse uploadVideoResponse = null;
+        ResponseData<UploadVideoResponse> responseData = null;
+        UploadVideoResponse uploadVideoResponse;
 
         try{
             Video video = new Video();
 
-            Long memberId = request.getMemberId();
-            Long petId = request.getPetId();
-            File videoData = request.getVideo();
+            String fileName = request.getFileName();
+            Long duration = request.getDuration();
+            Long size = request.getSize();
+            String fileUri = request.getFileUri();
 
-            video.setMember(memberService.findOne(memberId));
-            video.setPet(petService.findOne(petId));
-            video.setVideo(videoData);
+            video.setMember(memberService.findOne(request.getMemberId()));
+            video.setPet(petService.findOne(request.getPetId()));
+
+            video.setFileName(fileName);
+            video.setDuration(duration);
+            video.setSize(size);
+            video.setFileUri(fileUri);
 
             Long id = videoService.save(video);
 
-            uploadVideoResponse = new UploadVideoResponse(id, video.getVideo(),video.getEmotion());
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,uploadVideoResponse);
+            uploadVideoResponse = new UploadVideoResponse(id, fileUri);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
+        }catch(NoSuchElementException e){
+            log.error(e.getMessage());
         }catch(Exception e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_UPLOAD_VIDEO, uploadVideoResponse);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_UPLOAD_VIDEO, null);
             log.error(e.getMessage());
         }
         return responseData;
@@ -68,13 +75,13 @@ public class VideoController {
         log.info("getVideoById : " + videoId);
 
         ResponseData<VideoDto> responseData = null;
-        VideoDto videoDto = null;
+        VideoDto videoDto;
 
         try{
             Video video = videoService.findOne(videoId);
-            videoDto = new VideoDto(video.getId(),video.getVideo(),video.getEmotion());
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
 
+            videoDto = new VideoDto(video.getId(),video.getFileName(),video.getSize(),video.getFileUri(),video.getEmotion());
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_VIDEO,null);
             log.error(e.getMessage());

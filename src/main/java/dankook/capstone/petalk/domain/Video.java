@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.File;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -23,7 +22,10 @@ public class Video extends BaseEntity{
     @JoinColumn(name="memberid")
     private Member member;
 
-    private File video;
+    private String fileName;
+    private Long duration;
+    private Long size;
+    private String fileUri;
 
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
