@@ -29,4 +29,12 @@ public class CommentService {
     public void deleteById(Long id){
         commentRepository.deleteById(id);
     }
+
+    @Transactional
+    public void update(Long id, String content){
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        comment.setContent(content);
+    }
 }

@@ -102,9 +102,10 @@ public class CommunityController {
 
             updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent());
 
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateCommunityResponse);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,updateCommunityResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
+            log.error(e.getMessage());
         }catch(Exception e){
             log.error(e.getMessage());
         }
