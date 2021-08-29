@@ -71,7 +71,6 @@ public class CommentController {
 
     @Data
     static class CreateCommentRequest{
-        private Long id;
         private Long memberId;
         private Long communityId;
         private String content;
