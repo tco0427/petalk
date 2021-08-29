@@ -193,13 +193,11 @@ public class CommunityController {
 
     @Data
     static class CommentDto{
-        private Member member;
         private String writer;
         private String content;
 
         public CommentDto(Comment comment){
-            this.member = comment.getMember();
-            this.writer = member.getNickname();
+            this.writer = comment.getMember().getNickname();
             this.content = comment.getContent();
         }
     }
