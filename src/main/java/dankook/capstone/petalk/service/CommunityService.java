@@ -35,8 +35,9 @@ public class CommunityService {
     }
 
     @Transactional
-    public void update(Long id, String content, File attachment){
-        Community community = communityRepository.findById(id).get();
+    public void update(Long id, String content){
+        Community community = communityRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
         community.setContent(content);
     }
 

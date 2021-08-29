@@ -45,7 +45,8 @@ public class MemberService {
 
     @Transactional
     public void update(Long id, String name, String password, String email, String profileUrl){
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
         member.setName(name);
         member.setPassword(password);
         member.setEmail(email);

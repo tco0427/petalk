@@ -27,8 +27,6 @@ public class Community extends BaseEntity{
 
     private String content;
 
-    private File attachment;
-
     @OneToMany(mappedBy = "community")
     private List<Comment> commentList=new ArrayList<>();
 }
