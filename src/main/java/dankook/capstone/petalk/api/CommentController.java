@@ -14,10 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.NoSuchElementException;
@@ -80,5 +77,24 @@ public class CommentController {
         private String content;
     }
 
+    @ApiOperation(value = "", notes = "댓글 삭제")
+    @DeleteMapping("/{id}")
+    public ResponseData<DeleteCommentDto> deleteComment(@PathVariable("id") Long id){
+        ResponseData<DeleteCommentDto> responseData = null;
 
+        try{
+            commentService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new DeleteCommentDto(id));
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMENT, null);
+        }
+
+        return responseData;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class DeleteCommentDto{
+        private Long id;
+    }
 }
