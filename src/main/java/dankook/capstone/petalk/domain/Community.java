@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter @Setter
 public class Community extends BaseEntity{
@@ -17,11 +19,11 @@ public class Community extends BaseEntity{
     @Column(name="communitypk")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name="memberid")
     private Member member;
 
-    private String writer;
+//    private String writer;
 
     private String title;
 
