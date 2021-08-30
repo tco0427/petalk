@@ -48,7 +48,7 @@ public class CommentController {
 
             Long id = commentService.register(comment);
 
-            createCommentResponse = new CreateCommentResponse(id, community.getId(), member.getNickname(), content);
+            createCommentResponse = new CreateCommentResponse(id, community.getId(), community.getMember().getNickname(), content);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommentResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.UNAUTHORIZED, ResponseMessage.COMMENT_CREATION_FAIL, null);

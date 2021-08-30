@@ -46,16 +46,13 @@ public class CommunityController {
 
             Member findMember = memberService.findOne(request.getMemberId());
 
-            String nickname = findMember.getNickname();
-
             community.setTitle(request.getTitle());
-            community.setWriter(nickname);
             community.setContent(request.getContent());
             community.setMember(findMember);
 
             Long id = communityService.register(community);
 
-            createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(),community.getWriter(), community.getTitle());
+            createCommunityResponse = new CreateCommunityResponse(id, findMember.getId(), community.getMember().getNickname(), community.getTitle());
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommunityResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
@@ -183,7 +180,7 @@ public class CommunityController {
 
         public CommunityDto(Community community){
             this.id = community.getId();
-            this.writer = community.getWriter();
+            this.writer = community.getMember().getNickname();
             this.title = community.getTitle();
             this.content = community.getContent();
             this.commentList = community.getCommentList().stream()

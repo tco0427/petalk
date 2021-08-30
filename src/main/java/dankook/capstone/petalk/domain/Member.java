@@ -35,4 +35,7 @@ public class Member extends BaseEntity{
 
     @OneToMany(mappedBy = "member")
     private List<Video> videoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Community> communityList = new ArrayList<>();
 }
