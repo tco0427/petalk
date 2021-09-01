@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -204,4 +205,33 @@ public class CommunityController {
     /**
      * 게시글 조회(페이징)
      */
+    @ApiOperation(value = "", notes = "게시글 조회 with 페이징")
+    @GetMapping("/page/{page}")
+    public ResponseData<CommunityDtoList> getCommunityWithPaging(@PathVariable("page") int page){
+        ResponseData<CommunityDtoList> responseData = null;
+        CommunityDtoList communityDtoList = null;
+
+        try{
+            Slice<Community> slice = communityService.findAllBySlice(page);
+
+            Slice<CommunityDto> dtoSlice = slice.map(s -> new CommunityDto(s));
+
+            List<CommunityDto> content = dtoSlice.getContent();
+
+            communityDtoList = new CommunityDtoList(content);
+
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, communityDtoList);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+        return responseData;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class CommunityDtoList{
+        private List<CommunityDto> communityDtos;
+    }
 }

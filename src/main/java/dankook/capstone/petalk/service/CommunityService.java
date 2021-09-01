@@ -3,6 +3,8 @@ package dankook.capstone.petalk.service;
 import dankook.capstone.petalk.domain.Community;
 import dankook.capstone.petalk.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,4 +51,10 @@ public class CommunityService {
 //    public List<Community> findAll(CommunitySearch communitySearch){
 //      동적쿼리 작성해야함
 //    }
+
+    public Slice<Community> findAllBySlice(int page){
+        PageRequest pageRequest = PageRequest.of(page,10);
+
+        return communityRepository.findAllBy(pageRequest);
+    }
 }
