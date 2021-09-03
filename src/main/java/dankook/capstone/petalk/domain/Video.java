@@ -31,6 +31,16 @@ public class Video extends BaseEntity{
     private Long size;
     private String fileUri;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
+
+    public Video(Member member, Pet pet, String fileName, Long duration, Long size, String fileUri) {
+        this.pet = pet;
+        this.member = member;
+        this.fileName = fileName;
+        this.duration = duration;
+        this.size = size;
+        this.fileUri = fileUri;
+    }
 }

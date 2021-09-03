@@ -7,7 +7,6 @@ import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +36,8 @@ public class MemberController {
 
         try {
 
-            Member member = new Member();
-            member.setUserId(request.getUserId());
-            member.setName(request.getName());
-            member.setNickname(request.getNickname());
-            member.setPassword(request.getPassword());
-            member.setProfileUrl(request.getProfileUrl());
-            member.setEmail(request.getEmail());
+            Member member = new Member(request.getUserId(),request.getName(),
+                    request.getNickname(),request.getPassword(),request.getProfileUrl(),request.getEmail());
 
             Long id = memberService.join(member);
 

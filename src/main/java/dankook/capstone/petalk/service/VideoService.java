@@ -28,7 +28,7 @@ public class VideoService {
     }
 
     @Transactional
-    public void update(Long id, Emotion emotion){
+    public void updateEmotion(Long id, Emotion emotion){
         Video video = videoRepository.findById(id).orElse(null);
         video.setEmotion(emotion);
     }

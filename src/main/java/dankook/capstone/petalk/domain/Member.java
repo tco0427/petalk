@@ -41,4 +41,30 @@ public class Member extends BaseEntity{
 
     @OneToMany(mappedBy = "member")
     private List<Community> communityList = new ArrayList<>();
+
+    public void updateMember(String name, String password, String email, String profileUrl){
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
+
+    public Member(Long id, String userId, String password, String name, String nickname, String email, String profileUrl) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
+
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
 }

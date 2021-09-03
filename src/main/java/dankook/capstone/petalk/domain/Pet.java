@@ -51,4 +51,28 @@ public class Pet {
         this.member=member;
         member.getPetList().add(this);
     }
+
+    public Pet(Long id, Member member, String petName, Gender gender, String petType, Integer petAge) {
+        this.id = id;
+        this.member = member;
+        this.petName = petName;
+        this.gender = gender;
+        this.petType = petType;
+        this.petAge = petAge;
+    }
+
+    public Pet(Member member, String petName, Gender gender, String petType, Integer petAge) {
+        this.member = member;
+        this.petName = petName;
+        this.gender = gender;
+        this.petType = petType;
+        this.petAge = petAge;
+    }
+
+    public void update(String petName, Gender gender, String petType, Integer petAge) {
+        this.petName = petName;
+        this.gender = gender;
+        this.petType = petType;
+        this.petAge = petAge;
+    }
 }

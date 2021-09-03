@@ -36,15 +36,11 @@ public class CommentController {
         CreateCommentResponse createCommentResponse;
 
         try{
-            Comment comment = new Comment();
-
             Member member = memberService.findOne(request.getMemberId());
             Community community = communityService.findOne(request.getCommunityId());
             String content = request.getContent();
 
-            comment.setMember(member);
-            comment.setCommunity(community);
-            comment.setContent(content);
+            Comment comment = new Comment(member, content, community);
 
             Long id = commentService.register(comment);
 

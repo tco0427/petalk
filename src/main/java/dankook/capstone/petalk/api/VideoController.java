@@ -4,6 +4,8 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Emotion;
+import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.domain.Video;
 import dankook.capstone.petalk.dto.request.UploadVideoRequest;
 import dankook.capstone.petalk.dto.response.UploadVideoResponse;
@@ -41,20 +43,16 @@ public class VideoController {
         UploadVideoResponse uploadVideoResponse;
 
         try{
-            Video video = new Video();
-
             String fileName = request.getFileName();
             Long duration = request.getDuration();
             Long size = request.getSize();
             String fileUri = request.getFileUri();
 
-            video.setMember(memberService.findOne(request.getMemberId()));
-            video.setPet(petService.findOne(request.getPetId()));
+            Member member = memberService.findOne(request.getMemberId());
+            Pet pet = petService.findOne(request.getPetId());
 
-            video.setFileName(fileName);
-            video.setDuration(duration);
-            video.setSize(size);
-            video.setFileUri(fileUri);
+
+            Video video = new Video(member, pet, fileName, duration, size, fileUri);
 
             Long id = videoService.save(video);
 
