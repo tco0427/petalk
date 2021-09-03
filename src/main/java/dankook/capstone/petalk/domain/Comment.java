@@ -1,13 +1,18 @@
 package dankook.capstone.petalk.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Date;
+
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter @Setter
+@Getter
+@DynamicUpdate
+@NoArgsConstructor(access = PROTECTED)
 public class Comment extends BaseEntity{
     @Id @GeneratedValue
     @Column(name="commentpk")
@@ -16,8 +21,6 @@ public class Comment extends BaseEntity{
     @OneToOne
     @JoinColumn(name="memberid")
     private Member member;
-
-//    private String writer;
 
     private String content;
 

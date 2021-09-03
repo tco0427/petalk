@@ -1,18 +1,21 @@
 package dankook.capstone.petalk.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.*;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter @Setter
+@Getter
+@DynamicUpdate
+@NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue(strategy = IDENTITY)

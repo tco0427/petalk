@@ -2,8 +2,10 @@ package dankook.capstone.petalk.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -11,10 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter @Setter
-@ToString
+@Getter
+@ToString(of = {"id", "petName", "gender", "petType", "petAge"})
+@DynamicUpdate
+@NoArgsConstructor(access = PROTECTED)
 public class Pet {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="petpk")
