@@ -43,13 +43,9 @@ public class CommunityController {
         CreateCommunityResponse createCommunityResponse;
 
         try{
-            Community community = new Community();
-
             Member findMember = memberService.findOne(request.getMemberId());
 
-            community.setTitle(request.getTitle());
-            community.setContent(request.getContent());
-            community.setMember(findMember);
+            Community community = new Community(findMember, request.getTitle(), request.getContent());
 
             Long id = communityService.register(community);
 

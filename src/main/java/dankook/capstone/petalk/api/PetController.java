@@ -9,7 +9,6 @@ import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -42,15 +41,9 @@ public class PetController {
         CreatePetResponse createPetResponse = null;
 
         try {
-            Pet pet = new Pet();
-
             Member member = memberService.findOne(request.getMemberId());
 
-            pet.setMember(member);
-            pet.setPetName(request.getPetName());
-            pet.setGender(request.getGender());
-            pet.setPetType(request.getPetType());
-            pet.setPetAge(request.getPetAge());
+            Pet pet = new Pet(member, request.getPetName(), request.getGender(), request.getPetType(), request.getPetAge());
 
             Long id = petService.join(pet);
 
@@ -100,7 +93,7 @@ public class PetController {
 
         try{
             Member findMember = memberService.findOne(id);
-//            List<Pet> petList = petService.findByMemberId(findMember.getId());
+
             List<Pet> petList = findMember.getPetList();
 
             List<PetDto> petDtoList = petList.stream()

@@ -1,18 +1,21 @@
 package dankook.capstone.petalk.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.*;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter @Setter
+@Getter
+@DynamicUpdate
+@NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -38,4 +41,30 @@ public class Member extends BaseEntity{
 
     @OneToMany(mappedBy = "member")
     private List<Community> communityList = new ArrayList<>();
+
+    public void updateMember(String name, String password, String email, String profileUrl){
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
+
+    public Member(Long id, String userId, String password, String name, String nickname, String email, String profileUrl) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
+
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileUrl = profileUrl;
+    }
 }

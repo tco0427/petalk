@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Service
@@ -40,31 +39,12 @@ public class PetService {
     @Transactional
     public void update(Long id, String petName, Gender gender, String petType, Integer petAge){
         Pet pet = petRepository.findById(id).get();
-        pet.setPetName(petName);
-        pet.setGender(gender);
-        pet.setPetType(petType);
-        pet.setPetAge(petAge);
+
+        pet.update(petName, gender, petType, petAge);
     }
 
     @Transactional
     public void deleteById(Long id){
         petRepository.deleteById(id);
     }
-
-/*
-    public List<Pet> findByMemberId(Long id){
-        Member member = memberRepository.findById(id).get();
-        List<Pet> pets = petRepository.findAll();
-
-        List<Pet> result = new ArrayList<>();
-
-        for (Pet pet : pets) {
-            if(pet.getMember().getId() == member.getId()){
-                result.add(pet);
-            }
-        }
-
-        return result;
-    }
-*/
 }
