@@ -43,9 +43,6 @@ public class Pet {
     @Column(name="petage")
     private Integer petAge;
 
-    @OneToMany(mappedBy = "pet")
-    private List<Video> videoList = new ArrayList<>();
-
     //==연관관계 메소드==//
     public void setMember(Member member){
         this.member=member;
