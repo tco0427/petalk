@@ -49,10 +49,8 @@ public class VideoController {
             String fileUri = request.getFileUri();
 
             Member member = memberService.findOne(request.getMemberId());
-            Pet pet = petService.findOne(request.getPetId());
 
-
-            Video video = new Video(member, pet, fileName, duration, size, fileUri);
+            Video video = new Video(member, fileName, duration, size, fileUri);
 
             Long id = videoService.save(video);
 
@@ -99,7 +97,7 @@ public class VideoController {
             Long id = request.getId();
             Emotion emotion = request.getEmotion();
 
-            videoService.update(id, emotion);
+            videoService.updateEmotion(id, emotion);
 
             videoEmotionResponse = new VideoEmotionResponse(id, emotion);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoEmotionResponse);

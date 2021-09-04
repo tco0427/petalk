@@ -19,10 +19,6 @@ public class Video extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch= LAZY)
-    @JoinColumn(name="petpk")
-    private Pet pet;
-
-    @ManyToOne(fetch= LAZY)
     @JoinColumn(name="memberid")
     private Member member;
 
@@ -35,8 +31,7 @@ public class Video extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
 
-    public Video(Member member, Pet pet, String fileName, Long duration, Long size, String fileUri) {
-        this.pet = pet;
+    public Video(Member member, String fileName, Long duration, Long size, String fileUri) {
         this.member = member;
         this.fileName = fileName;
         this.duration = duration;
