@@ -1,9 +1,7 @@
 package dankook.capstone.petalk.domain;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -28,7 +26,6 @@ public class Community extends BaseEntity{
 
     private String title;
 
-    @Setter
     private String content;
 
     @OneToMany(mappedBy = "community")
@@ -37,6 +34,10 @@ public class Community extends BaseEntity{
     public Community(Member member, String title, String content) {
         this.member = member;
         this.title = title;
+        this.content = content;
+    }
+
+    public void setContent(String content){
         this.content = content;
     }
 }
