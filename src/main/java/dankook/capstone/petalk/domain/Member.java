@@ -32,6 +32,10 @@ public class Member extends BaseEntity{
 
     private String profileUrl;
 
+    private String platformCode;
+
+    private Integer platformId;
+
     @OneToMany(mappedBy = "member")
     private List<Pet> petList = new ArrayList<>();
 
@@ -40,6 +44,13 @@ public class Member extends BaseEntity{
 
     @OneToMany(mappedBy = "member")
     private List<Community> communityList = new ArrayList<>();
+
+    public Member(String name, String profileUrl, String platformCode, Integer platformId) {
+        this.name = name;
+        this.profileUrl = profileUrl;
+        this.platformCode = platformCode;
+        this.platformId = platformId;
+    }
 
     public void updateMember(String name, String password, String email, String profileUrl){
         this.name = name;
