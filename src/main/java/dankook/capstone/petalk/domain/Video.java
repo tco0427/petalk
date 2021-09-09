@@ -2,8 +2,6 @@ package dankook.capstone.petalk.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -23,11 +21,13 @@ public class Video extends BaseEntity{
     private Member member;
 
     private String fileName;
+
     private Long duration;
+
     private Long size;
+
     private String fileUri;
 
-    @Setter
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
 
@@ -37,5 +37,9 @@ public class Video extends BaseEntity{
         this.duration = duration;
         this.size = size;
         this.fileUri = fileUri;
+    }
+
+    public void setEmotion(Emotion emotion){
+        this.emotion = emotion;
     }
 }
