@@ -5,7 +5,6 @@ import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Emotion;
 import dankook.capstone.petalk.domain.Member;
-import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.domain.Video;
 import dankook.capstone.petalk.dto.request.UploadVideoRequest;
 import dankook.capstone.petalk.dto.response.UploadVideoResponse;
@@ -13,17 +12,15 @@ import dankook.capstone.petalk.dto.response.VideoDto;
 import dankook.capstone.petalk.dto.request.VideoEmotionRequest;
 import dankook.capstone.petalk.dto.response.VideoEmotionResponse;
 import dankook.capstone.petalk.service.MemberService;
-import dankook.capstone.petalk.service.PetService;
 import dankook.capstone.petalk.service.VideoService;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -34,7 +31,6 @@ public class VideoController {
 
     private final VideoService videoService;
     private final MemberService memberService;
-    private final PetService petService;
 
     @ApiOperation(value = "", notes = "동영상 client로부터 받아오기")
     @PostMapping("/upload")
