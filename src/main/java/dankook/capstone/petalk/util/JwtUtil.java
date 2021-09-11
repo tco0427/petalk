@@ -86,7 +86,7 @@ public class JwtUtil implements Serializable {
      * @param token String
      * @return Long
      */
-    public Long getUserIdByToken(String token){
+    public Long getMemberIdByToken(String token){
         Claims claims = getAllClaimsByToken(token);
         return claims.get(MEMBER_ID_CLAIM, Long.class);
     }
@@ -123,7 +123,7 @@ public class JwtUtil implements Serializable {
         }
 
         // 2. 토큰에서 userId값을 가져온다.
-        Long userId = getUserIdByToken(token);
+        Long userId = getMemberIdByToken(token);
         if(userId == null){ // 3. userId 없을경우
             throw new JwtException(ResponseMessage.INVALID_TOKEN);
         }

@@ -6,6 +6,7 @@ import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
 import dankook.capstone.petalk.service.MemberService;
+import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,24 +26,30 @@ import java.util.NoSuchElementException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
 
     /**
      * 회원 조회
      */
     @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
-    @GetMapping("/{id}")
-    public ResponseData<MemberDto> getMemberById(@PathVariable("id") Long id){
-        log.info("getMemberById : " + id);
-
+    @GetMapping("/")
+    public ResponseData<MemberDto> getMemberById(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
         MemberDto memberDto;
 
         try{
-            Member member = memberService.findOne(id);
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            Member member = memberService.findOne(memberId);
+
             memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname(),member.getPetList());
+
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
+
             log.info(responseData.toString());
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
