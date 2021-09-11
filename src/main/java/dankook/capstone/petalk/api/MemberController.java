@@ -25,61 +25,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    /**
-     * 회원 생성
-     */
-    @ApiOperation(value = "", notes = "신규 회원 생성")
-    @PostMapping("/new")
-    public ResponseData<CreateMemberResponse> saveMember(@RequestBody @Valid CreateMemberRequest request) {
-        ResponseData<CreateMemberResponse> responseData;
-        CreateMemberResponse createMemberResponse = null;
-
-        try {
-
-            Member member = new Member(request.getUserId(),request.getName(),
-                    request.getNickname(),request.getPassword(),request.getProfileUrl(),request.getEmail());
-
-            Long id = memberService.join(member);
-
-            createMemberResponse = new CreateMemberResponse(id, member.getUserId(), member.getName(), member.getEmail(),member.getNickname());
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createMemberResponse);
-
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, createMemberResponse);
-            log.error(e.getMessage());
-        }catch(Exception e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL,createMemberResponse);
-            log.error(e.getMessage());
-        }
-        return responseData;
-    }
-
-
-    @Data
-    @AllArgsConstructor
-    static class CreateMemberResponse{
-        private Long id;
-        private String userId;
-        private String nickname;
-        private String name;
-        private String email;
-    }
-
-    @Data
-    static class CreateMemberRequest{
-        private String userId;
-        private String nickname;
-        private String password;
-        private String name;
-        private String email;
-        private String profileUrl;
-    }
-
 
     /**
      * 회원 조회
      */
-
     @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
     @GetMapping("/{id}")
     public ResponseData<MemberDto> getMemberById(@PathVariable("id") Long id){

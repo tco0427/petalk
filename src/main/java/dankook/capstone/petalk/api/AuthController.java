@@ -8,6 +8,7 @@ import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.util.JwtUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final MemberService memberService;
 
+    @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/signup")
     public ResponseData<SignUpResponse> singUp(@RequestBody SignUpRequest request){
         log.info(request.toString());

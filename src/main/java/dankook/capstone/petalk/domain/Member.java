@@ -52,6 +52,17 @@ public class Member extends BaseEntity{
         this.platformId = platformId;
     }
 
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, String platformCode, Integer platformId) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileUrl = profileUrl;
+        this.platformCode = platformCode;
+        this.platformId = platformId;
+    }
+
     public void updateMember(String name, String password, String email, String profileUrl){
         this.name = name;
         this.password = password;
