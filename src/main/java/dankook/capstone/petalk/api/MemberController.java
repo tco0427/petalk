@@ -4,7 +4,9 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Member;
-import dankook.capstone.petalk.domain.Pet;
+import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
+import dankook.capstone.petalk.dto.response.MemberDto;
+import dankook.capstone.petalk.dto.response.UpdateMemberResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequestMapping("/api/member")
@@ -60,16 +61,6 @@ public class MemberController {
         return responseData;
     }
 
-    @Data
-    @AllArgsConstructor
-    static class MemberDto{
-        private String userId;
-        private String nickname;
-        private String name;
-        private String email;
-        private List<Pet> petList;
-    }
-
     /**
      * 회원 수정
      */
@@ -95,26 +86,6 @@ public class MemberController {
         return responseData;
     }
 
-    @Data
-    static class UpdateMemberRequest{
-        private String name;
-        private String nickname;
-        private String password;
-        private String email;
-        private String profileUrl;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdateMemberResponse{
-        private Long id;
-        private String name;
-        private String nickname;
-        private String password;
-        private String email;
-        private String profileUrl;
-    }
-
     /**
      * 회원 삭제
      */
@@ -137,5 +108,4 @@ public class MemberController {
     static class DeleteMemberDto{
         private Long id;
     }
-
 }
