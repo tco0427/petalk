@@ -6,6 +6,10 @@ import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Comment;
 import dankook.capstone.petalk.domain.Community;
 import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.dto.request.CreateCommunityRequest;
+import dankook.capstone.petalk.dto.request.UpdateCommunityRequest;
+import dankook.capstone.petalk.dto.response.CreateCommunityResponse;
+import dankook.capstone.petalk.dto.response.UpdateCommunityResponse;
 import dankook.capstone.petalk.service.CommunityService;
 import dankook.capstone.petalk.service.MemberService;
 import io.swagger.annotations.ApiOperation;
@@ -62,22 +66,6 @@ public class CommunityController {
         return responseData;
     }
 
-    @Data
-    @AllArgsConstructor
-    static class CreateCommunityResponse{
-        private Long id;
-        private Long memberId;
-        private String writer;
-        private String title;
-    }
-
-    @Data
-    static class CreateCommunityRequest{
-        private Long memberId;
-        private String title;
-        private String content;
-    }
-
     /**
      * 게시글 내용 수정
      */
@@ -105,20 +93,6 @@ public class CommunityController {
         }
 
         return responseData;
-    }
-
-    @Data
-    static class UpdateCommunityRequest{
-        private String content;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdateCommunityResponse{
-        private Long id;
-        private Long memberId;
-        private String title;
-        private String content;
     }
 
     /**
