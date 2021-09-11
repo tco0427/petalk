@@ -6,6 +6,10 @@ import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Gender;
 import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Pet;
+import dankook.capstone.petalk.dto.request.CreatePetRequest;
+import dankook.capstone.petalk.dto.request.UpdatePetRequest;
+import dankook.capstone.petalk.dto.response.CreatePetResponse;
+import dankook.capstone.petalk.dto.response.UpdatePetResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
 import io.swagger.annotations.ApiOperation;
@@ -59,25 +63,6 @@ public class PetController {
             log.error(e.getMessage());
         }
         return responseData;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class CreatePetResponse{
-        private Long id;
-        private String petName;
-        private Gender gender;
-        private String petType;
-        private Integer petAge;
-    }
-
-    @Data
-    static class CreatePetRequest{
-        private Long memberId;
-        private String petName;
-        private Gender gender;
-        private String petType;
-        private Integer petAge;
     }
 
     /**
@@ -162,25 +147,6 @@ public class PetController {
         }
         return responseData;
     }
-
-    @Data
-    static class UpdatePetRequest{
-        private String petName;
-        private Gender gender;
-        private String petType;
-        private Integer petAge;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdatePetResponse{
-        private Long id;
-        private String petName;
-        private Gender gender;
-        private String petType;
-        private Integer petAge;
-    }
-
 
     /**
      * 펫 정보 삭제
