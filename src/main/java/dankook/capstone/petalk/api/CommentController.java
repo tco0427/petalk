@@ -6,6 +6,10 @@ import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Comment;
 import dankook.capstone.petalk.domain.Community;
 import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.dto.request.CreateCommentRequest;
+import dankook.capstone.petalk.dto.request.UpdateCommentRequest;
+import dankook.capstone.petalk.dto.response.CreateCommentResponse;
+import dankook.capstone.petalk.dto.response.UpdateCommentResponse;
 import dankook.capstone.petalk.service.CommentService;
 import dankook.capstone.petalk.service.CommunityService;
 import dankook.capstone.petalk.service.MemberService;
@@ -56,22 +60,6 @@ public class CommentController {
         return responseData;
     }
 
-    @Data
-    @AllArgsConstructor
-    static class CreateCommentResponse{
-        private Long id;
-        private Long communityId;
-        private String writer;
-        private String content;
-    }
-
-    @Data
-    static class CreateCommentRequest{
-        private Long memberId;
-        private Long communityId;
-        private String content;
-    }
-
     @ApiOperation(value = "", notes = "댓글 삭제")
     @DeleteMapping("/{id}")
     public ResponseData<DeleteCommentDto> deleteComment(@PathVariable("id") Long id){
@@ -115,18 +103,5 @@ public class CommentController {
         }
 
         return responseData;
-    }
-
-    @Data
-    static class UpdateCommentRequest{
-        private String content;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdateCommentResponse{
-        private Long id;
-        private Long communityId;
-        private String content;
     }
 }
