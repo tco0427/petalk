@@ -2,12 +2,14 @@ package dankook.capstone.petalk.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.EnumType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -15,6 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @DynamicUpdate
 @NoArgsConstructor(access = PROTECTED)
+@ToString(of = {"id","userId","name","nickname","email"})
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -32,7 +35,8 @@ public class Member extends BaseEntity{
 
     private String profileUrl;
 
-    private String platformCode;
+    @Enumerated(STRING)
+    private PlatformCode platformCode;
 
     private Integer platformId;
 
@@ -45,14 +49,14 @@ public class Member extends BaseEntity{
     @OneToMany(mappedBy = "member")
     private List<Community> communityList = new ArrayList<>();
 
-    public Member(String name, String profileUrl, String platformCode, Integer platformId) {
+    public Member(String name, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.name = name;
         this.profileUrl = profileUrl;
         this.platformCode = platformCode;
         this.platformId = platformId;
     }
 
-    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, String platformCode, Integer platformId) {
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -64,10 +68,13 @@ public class Member extends BaseEntity{
     }
 
     public void updateMember(String name, String password, String email, String profileUrl){
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.profileUrl = profileUrl;
+        if(name != null) {this.name = name;}
+
+        if(password != null) {this.password = password;}
+
+        if(email != null) {this.email = email;}
+
+        if(profileUrl != null) {this.profileUrl = profileUrl;}
     }
 
     public Member(Long id, String userId, String password, String name, String nickname, String email, String profileUrl) {

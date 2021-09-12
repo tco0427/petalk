@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -21,7 +22,6 @@ public class Pet {
     @Column(name="petpk")
     private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch= LAZY)
     @JoinColumn(name="memberid")
     private Member member;
@@ -30,7 +30,7 @@ public class Pet {
     private String petName;
 
     @Column(name="gender")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Gender gender;
 
     @Column(name="pettype")

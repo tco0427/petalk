@@ -1,6 +1,7 @@
 package dankook.capstone.petalk.dto.request;
 
 import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.domain.PlatformCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class SignUpRequest {
     private String name;
     private String email;
     private String profileUrl;
-    private String platformCode;
+    private PlatformCode platformCode;
     private Integer platformId;
 
     public Member toMemberEntity() {
