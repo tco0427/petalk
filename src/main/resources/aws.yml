@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: IAM 사용자 엑세스 키
+      secretKey: IAM 사용자 비밀 엑세스 키
+    s3:
+      bucket: 버킷 이름
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
