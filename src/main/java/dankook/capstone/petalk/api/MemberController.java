@@ -35,7 +35,7 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
     @GetMapping("/")
-    public ResponseData<MemberDto> getMemberById(HttpServletRequest httpServletRequest){
+    public ResponseData<MemberDto> getMember(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
         MemberDto memberDto;
@@ -65,15 +65,19 @@ public class MemberController {
      * 회원 수정
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
-    @PutMapping("/{id}")
-    public ResponseData<UpdateMemberResponse> updateMember(@PathVariable("id") Long id,
+    @PutMapping("/}")
+    public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
         UpdateMemberResponse updateMemberResponse = null;
 
         try{
-            memberService.update(id,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
-            Member member = memberService.findOne(id);
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            memberService.update(memberId,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
+            Member member = memberService.findOne(memberId);
 
             updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
@@ -91,13 +95,18 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "회원 정보 삭제")
     @DeleteMapping("/{id}")
-    public ResponseData<DeleteMemberDto> deleteMember(@PathVariable("id") Long id){
+    public ResponseData<DeleteMemberDto> deleteMember(HttpServletRequest httpServletRequest){
         ResponseData<DeleteMemberDto> responseData = null;
+
         try{
-            memberService.deleteById(id);
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(id));
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            memberService.deleteById(memberId);
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(memberId));
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(id));
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(memberId));
             log.error(e.getMessage());
         }
         return responseData;
