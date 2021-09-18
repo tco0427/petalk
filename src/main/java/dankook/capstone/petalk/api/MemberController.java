@@ -4,6 +4,7 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
 import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.dto.response.UpdateMemberResponse;
@@ -33,8 +34,8 @@ public class MemberController {
     /**
      * 회원 조회
      */
-    @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
-    @GetMapping("/")
+    @ApiOperation(value = "", notes = "토큰 받아서 회원 정보 조회")
+    @GetMapping("/kakao/")
     public ResponseData<MemberDto> getMember(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
@@ -61,11 +62,34 @@ public class MemberController {
         return responseData;
     }
 
+    @ApiOperation(value = "", notes = "아이디 비밀번호 받아서 회원 조회")
+    @GetMapping("/")
+    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
+        ResponseData<MemberDto> responseData =null;
+
+        MemberDto memberDto;
+
+        try{
+            Member findMember = memberService.findOneByUserId(request.getUserId());
+
+            if(findMember.getPassword().equals(request.getPassword())){
+                memberDto = new MemberDto(findMember);
+                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
+            }else {throw new NoSuchElementException();}
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
     /**
      * 회원 수정
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
-    @PutMapping("/}")
+    @PutMapping("/")
     public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
@@ -106,7 +130,7 @@ public class MemberController {
             memberService.deleteById(memberId);
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(memberId));
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(memberId));
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, null);
             log.error(e.getMessage());
         }
         return responseData;
