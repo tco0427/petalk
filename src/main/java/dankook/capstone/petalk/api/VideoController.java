@@ -65,48 +65,25 @@ public class VideoController {
         return responseData;
     }
 
-//    @ApiOperation(value = "", notes = "동영상 client로 전송")
-//    @GetMapping("/{videoId}")
-//    public ResponseData<VideoDto> getVideo(@PathVariable("videoId") Long videoId){
-//        log.info("getVideoById : " + videoId);
-//
-//        ResponseData<VideoDto> responseData = null;
-//        VideoDto videoDto;
-//
-//        try{
-//            Video video = videoService.findOne(videoId);
-//
-//            videoDto = new VideoDto(video.getId(),video.getEmotion());
-//            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
-//        }catch(NoSuchElementException e){
-//            responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_VIDEO,null);
-//            log.error(e.getMessage());
-//        }catch(Exception e){
-//            log.error(e.getMessage());
-//        }
-//
-//        return responseData;
-//    }
-//
-//    @PostMapping("/emotion")
-//    public ResponseData<VideoEmotionResponse> getVideoEmotion(@RequestBody VideoEmotionRequest request){
-//        ResponseData<VideoEmotionResponse> responseData = null;
-//        VideoEmotionResponse videoEmotionResponse;
-//
-//        try{
-//            Long id = request.getId();
-//            Emotion emotion = request.getEmotion();
-//
-//            videoService.updateEmotion(id, emotion);
-//
-//            videoEmotionResponse = new VideoEmotionResponse(id, emotion);
-//            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoEmotionResponse);
-//        }catch(NoSuchElementException e){
-//            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_VIDEO, null);
-//            log.error(e.getMessage());
-//        }catch(Exception e){
-//            log.error(e.getMessage());
-//        }
-//        return responseData;
-//    }
+    @PostMapping("/emotion")
+    public ResponseData<VideoEmotionResponse> getVideoEmotion(@RequestBody VideoEmotionRequest request){
+        ResponseData<VideoEmotionResponse> responseData = null;
+        VideoEmotionResponse videoEmotionResponse;
+
+        try{
+            Long id = request.getId();
+            Emotion emotion = request.getEmotion();
+
+            videoService.updateEmotion(id, emotion);
+
+            videoEmotionResponse = new VideoEmotionResponse(id, emotion);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoEmotionResponse);
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_VIDEO, null);
+            log.error(e.getMessage());
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+        return responseData;
+    }
 }

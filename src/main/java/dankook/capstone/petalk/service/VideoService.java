@@ -29,7 +29,8 @@ public class VideoService {
 
     @Transactional
     public void updateEmotion(Long id, Emotion emotion){
-        Video video = videoRepository.findById(id).orElse(null);
+        Video video = videoRepository.findById(id)
+                        .orElseThrow(NoSuchElementException::new);
         video.setEmotion(emotion);
     }
 }
