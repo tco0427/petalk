@@ -20,23 +20,14 @@ public class Video extends BaseEntity{
     @JoinColumn(name="memberid")
     private Member member;
 
-    private String fileName;
-
-    private Long duration;
-
-    private Long size;
-
-    private String fileUri;
+    private String fileUrl;
 
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
 
-    public Video(Member member, String fileName, Long duration, Long size, String fileUri) {
+    public Video(Member member, String fileUrl) {
         this.member = member;
-        this.fileName = fileName;
-        this.duration = duration;
-        this.size = size;
-        this.fileUri = fileUri;
+        this.fileUrl = fileUrl;
     }
 
     public void setEmotion(Emotion emotion){

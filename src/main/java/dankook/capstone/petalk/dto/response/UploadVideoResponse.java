@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class UploadVideoResponse {
     private Long id;
-    private String fileUri;
+    private String fileUrl;
 }

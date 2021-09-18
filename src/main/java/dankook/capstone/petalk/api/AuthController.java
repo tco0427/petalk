@@ -42,6 +42,8 @@ public class AuthController {
 
             log.info(responseData.toString());
 
+        } catch(IllegalArgumentException e){
+            return new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, null);
         } catch(Exception e){
             log.error(e.getMessage());
         }

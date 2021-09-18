@@ -8,8 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class VideoDto {
     private Long id;
-    private String fileName;
-    private Long size;
-    private String fileUri;
     private Emotion emotion;
 }
