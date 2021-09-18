@@ -12,15 +12,18 @@ import dankook.capstone.petalk.dto.response.VideoDto;
 import dankook.capstone.petalk.dto.request.VideoEmotionRequest;
 import dankook.capstone.petalk.dto.response.VideoEmotionResponse;
 import dankook.capstone.petalk.service.MemberService;
+import dankook.capstone.petalk.service.S3Uploader;
 import dankook.capstone.petalk.service.VideoService;
+import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -31,30 +34,33 @@ public class VideoController {
 
     private final VideoService videoService;
     private final MemberService memberService;
+    private final S3Uploader s3Uploader;
+    private final JwtUtil jwtUtil;
 
-    @ApiOperation(value = "", notes = "동영상 client로부터 받아오기")
+    @ApiOperation(value = "", notes = "동영상 S3에 업로드하기")
     @PostMapping("/upload")
-    public ResponseData<UploadVideoResponse> uploadVideo(@RequestBody @Valid UploadVideoRequest request){
+    public ResponseData<UploadVideoResponse> upload(@RequestParam("video") MultipartFile multipartFile, HttpServletRequest httpServletRequest) {
         ResponseData<UploadVideoResponse> responseData = null;
         UploadVideoResponse uploadVideoResponse;
 
         try{
-            String fileName = request.getFileName();
-            Long duration = request.getDuration();
-            Long size = request.getSize();
-            String fileUri = request.getFileUri();
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            Member member = memberService.findOne(request.getMemberId());
+            Member member = memberService.findOne(memberId);
 
-            Video video = new Video(member, fileName, duration, size, fileUri);
+            String url = s3Uploader.upload(multipartFile, "static");
 
-            Long id = videoService.save(video);
+            Video video = new Video(member, url);
 
-            uploadVideoResponse = new UploadVideoResponse(id, fileUri);
+            Long videoId = videoService.save(video);
+
+            uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
         }catch(NoSuchElementException e){
-            log.error(e.getMessage());
-        }catch(Exception e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        }catch(IOException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_UPLOAD_VIDEO, null);
             log.error(e.getMessage());
         }
@@ -72,7 +78,7 @@ public class VideoController {
         try{
             Video video = videoService.findOne(videoId);
 
-            videoDto = new VideoDto(video.getId(),video.getFileName(),video.getSize(),video.getFileUri(),video.getEmotion());
+            videoDto = new VideoDto(video.getId(),video.getEmotion());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,videoDto);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND,ResponseMessage.NOT_FOUND_VIDEO,null);

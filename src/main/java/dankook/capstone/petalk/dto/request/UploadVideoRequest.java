@@ -4,9 +4,7 @@ import lombok.Data;
 
 @Data
 public class UploadVideoRequest {
+    private Long id;
     private Long memberId;
-    private String fileName;
-    private Long duration;
-    private Long size;
-    private String fileUri;
+    private String fileUrl;
 }
