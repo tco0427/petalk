@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class PetalkApplication {
 	public static final String APPLICATION_LOCATIONS = "spring.config.location=" +
 			"classpath:application.yml," +
-			"classpath:aws.hml";
+			"classpath:aws.yml";
 
 //	public static void main(String[] args) {
 //		SpringApplication.run(PetalkApplication.class, args);
