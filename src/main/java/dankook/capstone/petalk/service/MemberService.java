@@ -24,6 +24,11 @@ public class MemberService {
         return member.getId();
     }
 
+    public Member findOneByUserId(String userId){
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
     private void validateDuplicateMember(Member member) {
         List<Member> findMembers=memberRepository.findAll();
         for (Member findMember : findMembers) {

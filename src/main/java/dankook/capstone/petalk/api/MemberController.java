@@ -4,6 +4,7 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
 import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.dto.response.UpdateMemberResponse;
@@ -33,9 +34,9 @@ public class MemberController {
     /**
      * 회원 조회
      */
-    @ApiOperation(value = "", notes = "id값으로 회원 정보 조회")
-    @GetMapping("/")
-    public ResponseData<MemberDto> getMemberById(HttpServletRequest httpServletRequest){
+    @ApiOperation(value = "", notes = "토큰 받아서 회원 정보 조회")
+    @GetMapping("/kakao/")
+    public ResponseData<MemberDto> getMember(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
         MemberDto memberDto;
@@ -61,19 +62,46 @@ public class MemberController {
         return responseData;
     }
 
+    @ApiOperation(value = "", notes = "아이디 비밀번호 받아서 회원 조회")
+    @GetMapping("/")
+    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
+        ResponseData<MemberDto> responseData =null;
+
+        MemberDto memberDto;
+
+        try{
+            Member findMember = memberService.findOneByUserId(request.getUserId());
+
+            if(findMember.getPassword().equals(request.getPassword())){
+                memberDto = new MemberDto(findMember);
+                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
+            }else {throw new NoSuchElementException();}
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
     /**
      * 회원 수정
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
-    @PutMapping("/{id}")
-    public ResponseData<UpdateMemberResponse> updateMember(@PathVariable("id") Long id,
+    @PutMapping("/")
+    public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
         UpdateMemberResponse updateMemberResponse = null;
 
         try{
-            memberService.update(id,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
-            Member member = memberService.findOne(id);
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            memberService.update(memberId,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
+            Member member = memberService.findOne(memberId);
 
             updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
@@ -91,13 +119,18 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "회원 정보 삭제")
     @DeleteMapping("/{id}")
-    public ResponseData<DeleteMemberDto> deleteMember(@PathVariable("id") Long id){
+    public ResponseData<DeleteMemberDto> deleteMember(HttpServletRequest httpServletRequest){
         ResponseData<DeleteMemberDto> responseData = null;
+
         try{
-            memberService.deleteById(id);
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(id));
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            memberService.deleteById(memberId);
+            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteMemberDto(memberId));
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, new DeleteMemberDto(id));
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_USER, null);
             log.error(e.getMessage());
         }
         return responseData;
