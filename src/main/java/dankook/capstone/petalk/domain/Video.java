@@ -25,6 +25,12 @@ public class Video extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Emotion emotion;
 
+    public Video(Long id, Member member, String fileUrl){
+        this.id = id;
+        this.member = member;
+        this.fileUrl = fileUrl;
+    }
+
     public Video(Member member, String fileUrl) {
         this.member = member;
         this.fileUrl = fileUrl;
