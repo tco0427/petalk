@@ -1,6 +1,7 @@
 package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.domain.Emotion;
+import dankook.capstone.petalk.domain.Member;
 import dankook.capstone.petalk.domain.Video;
 import dankook.capstone.petalk.dto.response.VideoDto;
 import dankook.capstone.petalk.repository.VideoRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -25,6 +27,10 @@ public class VideoService {
     public Video findOne(Long videoId){
         return videoRepository.findById(videoId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public List<Video> findListByMember(Member member){
+        return videoRepository.findListByMember(member);
     }
 
     @Transactional
