@@ -1,7 +1,7 @@
 package dankook.capstone.petalk.dto.response;
 
-import dankook.capstone.petalk.domain.Member;
-import dankook.capstone.petalk.domain.Pet;
+import dankook.capstone.petalk.entity.Member;
+import dankook.capstone.petalk.entity.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

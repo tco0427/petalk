@@ -3,7 +3,7 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
-import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
 import dankook.capstone.petalk.dto.response.MemberDto;
@@ -30,12 +30,11 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
-
     /**
      * 회원 조회
      */
     @ApiOperation(value = "", notes = "토큰 받아서 회원 정보 조회")
-    @GetMapping("/kakao/")
+    @GetMapping("/kakao")
     public ResponseData<MemberDto> getMember(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
@@ -65,7 +64,7 @@ public class MemberController {
     @ApiOperation(value = "", notes = "아이디 비밀번호 받아서 회원 조회")
     @GetMapping("/")
     public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
-        ResponseData<MemberDto> responseData =null;
+        ResponseData<MemberDto> responseData = null;
 
         MemberDto memberDto;
 
@@ -93,7 +92,7 @@ public class MemberController {
     public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
-        UpdateMemberResponse updateMemberResponse = null;
+        UpdateMemberResponse updateMemberResponse;
 
         try{
             String token = jwtUtil.getTokenByHeader(httpServletRequest);
