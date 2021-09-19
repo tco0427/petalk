@@ -3,7 +3,7 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
-import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
 import dankook.capstone.petalk.service.MemberService;

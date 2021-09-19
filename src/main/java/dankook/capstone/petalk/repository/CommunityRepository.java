@@ -1,6 +1,6 @@
 package dankook.capstone.petalk.repository;
 
-import dankook.capstone.petalk.domain.Community;
+import dankook.capstone.petalk.entity.Community;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

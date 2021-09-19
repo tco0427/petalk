@@ -1,4 +1,4 @@
-package dankook.capstone.petalk.domain;
+package dankook.capstone.petalk.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,16 +67,6 @@ public class Member extends BaseEntity{
         this.platformId = platformId;
     }
 
-    public void updateMember(String name, String password, String email, String profileUrl){
-        if(name != null) {this.name = name;}
-
-        if(password != null) {this.password = password;}
-
-        if(email != null) {this.email = email;}
-
-        if(profileUrl != null) {this.profileUrl = profileUrl;}
-    }
-
     public Member(Long id, String userId, String password, String name, String nickname, String email, String profileUrl) {
         this.id = id;
         this.userId = userId;
@@ -94,5 +84,15 @@ public class Member extends BaseEntity{
         this.nickname = nickname;
         this.email = email;
         this.profileUrl = profileUrl;
+    }
+
+    public void updateMember(String name, String password, String email, String profileUrl){
+        if(name != null) {this.name = name;}
+
+        if(password != null) {this.password = password;}
+
+        if(email != null) {this.email = email;}
+
+        if(profileUrl != null) {this.profileUrl = profileUrl;}
     }
 }

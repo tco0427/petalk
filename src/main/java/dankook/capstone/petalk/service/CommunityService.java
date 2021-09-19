@@ -1,6 +1,6 @@
 package dankook.capstone.petalk.service;
 
-import dankook.capstone.petalk.domain.Community;
+import dankook.capstone.petalk.entity.Community;
 import dankook.capstone.petalk.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -8,11 +8,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

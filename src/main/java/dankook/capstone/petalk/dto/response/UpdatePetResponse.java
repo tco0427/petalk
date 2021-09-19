@@ -1,6 +1,6 @@
 package dankook.capstone.petalk.dto.response;
 
-import dankook.capstone.petalk.domain.Gender;
+import dankook.capstone.petalk.entity.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

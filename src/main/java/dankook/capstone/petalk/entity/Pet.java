@@ -1,6 +1,5 @@
-package dankook.capstone.petalk.domain;
+package dankook.capstone.petalk.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
