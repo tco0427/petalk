@@ -3,9 +3,9 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
-import dankook.capstone.petalk.domain.Comment;
-import dankook.capstone.petalk.domain.Community;
-import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.entity.Comment;
+import dankook.capstone.petalk.entity.Community;
+import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.CreateCommunityRequest;
 import dankook.capstone.petalk.dto.request.UpdateCommunityRequest;
 import dankook.capstone.petalk.dto.response.CreateCommunityResponse;
@@ -21,10 +21,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 

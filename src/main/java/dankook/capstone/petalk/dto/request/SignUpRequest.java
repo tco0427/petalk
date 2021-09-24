@@ -1,7 +1,7 @@
 package dankook.capstone.petalk.dto.request;
 
-import dankook.capstone.petalk.domain.Member;
-import dankook.capstone.petalk.domain.PlatformCode;
+import dankook.capstone.petalk.entity.Member;
+import dankook.capstone.petalk.entity.PlatformCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

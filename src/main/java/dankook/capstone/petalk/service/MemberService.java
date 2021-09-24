@@ -1,6 +1,6 @@
 package dankook.capstone.petalk.service;
 
-import dankook.capstone.petalk.domain.Member;
+import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) //읽기만 하는 경우 readOnly를 true해주는게 성능상 이점이 있음
@@ -22,6 +21,11 @@ public class MemberService {
         validateDuplicateMember(member);    //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
+    }
+
+    public Member findOneByUserId(String userId){
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     private void validateDuplicateMember(Member member) {

@@ -1,6 +1,6 @@
 package dankook.capstone.petalk.service;
 
-import dankook.capstone.petalk.domain.Comment;
+import dankook.capstone.petalk.entity.Comment;
 import dankook.capstone.petalk.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

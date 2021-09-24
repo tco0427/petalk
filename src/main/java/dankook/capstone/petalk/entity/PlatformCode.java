@@ -1,4 +1,4 @@
-package dankook.capstone.petalk.domain;
+package dankook.capstone.petalk.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
