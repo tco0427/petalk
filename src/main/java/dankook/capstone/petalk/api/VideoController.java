@@ -110,7 +110,6 @@ public class VideoController {
 
             List<Video> videoList = videoService.findListByMember(member);
 
-
             List<VideoDto> videoDtos = new ArrayList<>();
             for (Video video : videoList) {
                 VideoDto videoDto = new VideoDto(video);
