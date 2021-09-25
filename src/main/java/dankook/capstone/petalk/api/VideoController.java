@@ -18,11 +18,17 @@ import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -56,6 +62,24 @@ public class VideoController {
             Video video = new Video(member, url);
 
             Long videoId = videoService.save(video);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("url",url);
+            jsonObject.put("id",videoId);
+
+            URL pythonURL = new URL("http://localhost:5100/api/video/download");
+
+            HttpURLConnection conn = (HttpURLConnection) pythonURL.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+
+            bw.write(jsonObject.toString());
+            bw.flush();
+            bw.close();
 
             uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
@@ -111,10 +135,12 @@ public class VideoController {
             List<Video> videoList = videoService.findListByMember(member);
 
             List<VideoDto> videoDtos = new ArrayList<>();
+
             for (Video video : videoList) {
                 VideoDto videoDto = new VideoDto(video);
                 videoDtos.add(videoDto);
             }
+
             videoDtoList = new VideoDtoList(videoDtos);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoDtoList);
         }catch(NoSuchElementException e){
