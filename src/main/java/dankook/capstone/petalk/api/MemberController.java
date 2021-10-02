@@ -62,7 +62,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "", notes = "아이디 비밀번호 받아서 회원 조회")
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
         ResponseData<MemberDto> responseData = null;
 
