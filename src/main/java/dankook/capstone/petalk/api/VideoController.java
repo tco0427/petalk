@@ -19,16 +19,20 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -67,29 +71,28 @@ public class VideoController {
             jsonObject.put("url",url);
             jsonObject.put("id",videoId);
 
-            URL pythonURL = new URL("http://localhost:5000/api/video/upload");
+            HttpHeaders headers = new HttpHeaders();
 
-            HttpURLConnection conn = (HttpURLConnection) pythonURL.openConnection();
+            HttpEntity<JSONObject> entity = new HttpEntity<>(jsonObject, headers);
+            RestTemplate rt = new RestTemplate();
 
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setDoOutput(true);
+            rt.exchange(
+                    "http://localhost:5000/api/video/upload",
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
 
-            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
-
-            os.write(jsonObject.toString());
-            os.flush();
-            os.close();
-
-            conn.disconnect();
 
             uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
-        }catch(IOException e){
+        } catch(MalformedURLException e){
+            log.error(e.getMessage());
+        } catch(IOException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_UPLOAD_VIDEO, null);
             log.error(e.getMessage());
+        } catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }
         return responseData;
     }
