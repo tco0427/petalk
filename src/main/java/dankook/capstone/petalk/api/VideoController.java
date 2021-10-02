@@ -67,19 +67,21 @@ public class VideoController {
             jsonObject.put("url",url);
             jsonObject.put("id",videoId);
 
-            URL pythonURL = new URL("http://localhost:5100/api/video/download");
+            URL pythonURL = new URL("http://localhost:5000/api/video/upload");
 
             HttpURLConnection conn = (HttpURLConnection) pythonURL.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setDoOutput(true);
 
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
 
-            bw.write(jsonObject.toString());
-            bw.flush();
-            bw.close();
+            os.write(jsonObject.toString());
+            os.flush();
+            os.close();
+
+            conn.disconnect();
 
             uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
