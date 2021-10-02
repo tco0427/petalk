@@ -34,7 +34,7 @@ public class MemberController {
      * 회원 조회
      */
     @ApiOperation(value = "", notes = "토큰 받아서 회원 정보 조회")
-    @GetMapping("/kakao")
+    @GetMapping("/lookup")
     public ResponseData<MemberDto> getMember(HttpServletRequest httpServletRequest){
         ResponseData<MemberDto> responseData = null;
 
@@ -52,29 +52,6 @@ public class MemberController {
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
 
             log.info(responseData.toString());
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
-        }catch(Exception e){
-            log.error(e.getMessage());
-        }
-
-        return responseData;
-    }
-
-    @ApiOperation(value = "", notes = "아이디 비밀번호 받아서 회원 조회")
-    @PostMapping("/signin")
-    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
-        ResponseData<MemberDto> responseData = null;
-
-        MemberDto memberDto;
-
-        try{
-            Member findMember = memberService.findOneByUserId(request.getUserId());
-
-            if(findMember.getPassword().equals(request.getPassword())){
-                memberDto = new MemberDto(findMember);
-                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
-            }else {throw new NoSuchElementException();}
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }catch(Exception e){

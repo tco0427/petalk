@@ -3,6 +3,8 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
+import dankook.capstone.petalk.dto.request.SignInRequest;
+import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
@@ -15,6 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
 @RestController
 @Slf4j
@@ -45,6 +51,29 @@ public class AuthController {
         } catch(IllegalArgumentException e){
             return new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, null);
         } catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    @ApiOperation(value = "", notes = "아이디 비밀번호로 로그인")
+    @PostMapping("/signin")
+    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request, HttpServletRequest httpServletRequest) {
+        ResponseData<MemberDto> responseData = null;
+
+        MemberDto memberDto;
+
+        try{
+            Member findMember = memberService.findOneByUserId(request.getUserId());
+
+            if(findMember.getPassword().equals(request.getPassword())){
+                memberDto = new MemberDto(findMember);
+                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
+            }else {throw new NoSuchElementException();}
+        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        }catch(Exception e){
             log.error(e.getMessage());
         }
 
