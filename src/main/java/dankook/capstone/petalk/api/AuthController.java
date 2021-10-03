@@ -43,7 +43,7 @@ public class AuthController {
             Long savedMemberId = memberService.join(member);
 
             String token = jwtUtil.generateToken(savedMemberId, member.getPlatformId());
-            SignUpResponse jwtResponse = new SignUpResponse(savedMemberId, token);
+            SignUpResponse jwtResponse = new SignUpResponse(token);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, jwtResponse);
 
             log.info(responseData.toString());
@@ -59,7 +59,7 @@ public class AuthController {
 
     @ApiOperation(value = "", notes = "아이디 비밀번호로 로그인")
     @PostMapping("/signin")
-    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request, HttpServletRequest httpServletRequest) {
+    public ResponseData<MemberDto> getMemberById(@RequestBody @Valid SignInRequest request) {
         ResponseData<MemberDto> responseData = null;
 
         MemberDto memberDto;
@@ -67,8 +67,10 @@ public class AuthController {
         try{
             Member findMember = memberService.findOneByUserId(request.getUserId());
 
+            String token = jwtUtil.generateToken(findMember.getId(), findMember.getPlatformId());
+
             if(findMember.getPassword().equals(request.getPassword())){
-                memberDto = new MemberDto(findMember);
+                memberDto = new MemberDto(findMember, token);
                 responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
             }else {throw new NoSuchElementException();}
         }catch(NoSuchElementException e){
