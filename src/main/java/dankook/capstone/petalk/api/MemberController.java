@@ -65,7 +65,7 @@ public class MemberController {
      * 회원 수정
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
-    @PutMapping("/")
+    @PutMapping("/update")
     public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
@@ -94,9 +94,9 @@ public class MemberController {
      * 회원 삭제
      */
     @ApiOperation(value = "", notes = "회원 정보 삭제")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     public ResponseData<DeleteMemberDto> deleteMember(HttpServletRequest httpServletRequest){
-        ResponseData<DeleteMemberDto> responseData = null;
+        ResponseData<DeleteMemberDto> responseData;
 
         try{
             String token = jwtUtil.getTokenByHeader(httpServletRequest);
