@@ -10,6 +10,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class SignUpResponse {
-    private Long userId;
     private String token;
 }

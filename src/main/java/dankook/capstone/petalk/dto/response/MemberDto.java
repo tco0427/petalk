@@ -15,6 +15,7 @@ public class MemberDto {
     private String name;
     private String email;
     private List<Pet> petList;
+    private String token;
 
     public MemberDto(Member member){
         this.userId = member.getUserId();
@@ -22,5 +23,14 @@ public class MemberDto {
         this.name = member.getName();
         this.email = member.getEmail();
         this.petList = member.getPetList();
+    }
+
+    public MemberDto(Member member, String token){
+        this.userId = member.getUserId();
+        this.nickname = member.getNickname();
+        this.name = member.getName();
+        this.email = member.getEmail();
+        this.petList = member.getPetList();
+        this.token = token;
     }
 }

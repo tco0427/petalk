@@ -47,7 +47,7 @@ public class MemberController {
 
             Member member = memberService.findOne(memberId);
 
-            memberDto = new MemberDto(member.getUserId(),member.getName(),member.getEmail(),member.getNickname(),member.getPetList());
+            memberDto = new MemberDto(member);
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,memberDto);
 
