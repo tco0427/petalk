@@ -69,7 +69,7 @@ public class AuthController {
 
             String token = jwtUtil.generateToken(findMember.getId(), findMember.getPlatformId());
 
-            if(findMember.getPassword().equals(request.getPassword())){
+            if(memberService.validateMember(findMember, request.getPassword())){
                 memberDto = new MemberDto(findMember, token);
                 responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, memberDto);
             }else {throw new NoSuchElementException();}

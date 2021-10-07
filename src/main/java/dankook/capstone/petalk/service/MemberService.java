@@ -41,6 +41,16 @@ public class MemberService {
         }
     }
 
+    public Boolean validateMember(Member member, String password) {
+        String memberPassword = member.getPassword();
+
+        if(!passwordEncoder.matches(memberPassword, password)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     //회원 전체 조회
     public List<Member> findMembers(){
         return memberRepository.findAll();
