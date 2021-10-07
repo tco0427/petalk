@@ -49,6 +49,10 @@ public class Member extends BaseEntity{
     @OneToMany(mappedBy = "member")
     private List<Community> communityList = new ArrayList<>();
 
+    public void setPassword(String password){
+        this.password = password;
+    }
+
     public Member(String name, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.name = name;
         this.profileUrl = profileUrl;

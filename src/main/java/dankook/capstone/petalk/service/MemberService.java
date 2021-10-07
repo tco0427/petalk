@@ -3,6 +3,7 @@ package dankook.capstone.petalk.service;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,13 @@ import java.util.NoSuchElementException;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long join(Member member){
         validateDuplicateMember(member);    //중복 회원 검증
+        String encodedPassword = passwordEncoder.encode(member.getPassword());  //비밀번호 암호화
+        member.setPassword(encodedPassword);
         memberRepository.save(member);
         return member.getId();
     }
@@ -37,6 +41,16 @@ public class MemberService {
         }
     }
 
+    public Boolean validateMember(Member member, String password) {
+        String memberPassword = member.getPassword();
+
+        if(!passwordEncoder.matches(memberPassword, password)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     //회원 전체 조회
     public List<Member> findMembers(){
         return memberRepository.findAll();
@@ -51,6 +65,8 @@ public class MemberService {
     public void update(Long id, String name, String password, String email, String profileUrl){
         Member member = memberRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
+
+        password = passwordEncoder.encode(password);  //비밀번호 암호화
 
         member.updateMember(name, password, email, profileUrl);
     }
