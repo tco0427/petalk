@@ -66,6 +66,8 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
 
+        password = passwordEncoder.encode(password);  //비밀번호 암호화
+
         member.updateMember(name, password, email, profileUrl);
     }
 
