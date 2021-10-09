@@ -44,7 +44,7 @@ public class MemberService {
     public Boolean validateMember(Member member, String password) {
         String memberPassword = member.getPassword();
 
-        if(!passwordEncoder.matches(memberPassword, password)) {
+        if(!passwordEncoder.matches(password, memberPassword)) {
             return false;
         }else{
             return true;

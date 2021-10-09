@@ -66,6 +66,7 @@ public class AuthController {
 
         try{
             Member findMember = memberService.findOneByUserId(request.getUserId());
+            System.out.println(findMember);
 
             String token = jwtUtil.generateToken(findMember.getId(), findMember.getPlatformId());
 
