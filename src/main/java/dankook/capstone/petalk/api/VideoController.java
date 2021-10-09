@@ -77,7 +77,7 @@ public class VideoController {
             RestTemplate rt = new RestTemplate();
 
             rt.exchange(
-                    "http://localhost:5000/api/video/upload",
+                    "http://3.38.85.187/api/video/upload",
                     HttpMethod.POST,
                     entity,
                     String.class
