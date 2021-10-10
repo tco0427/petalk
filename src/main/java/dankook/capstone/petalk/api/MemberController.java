@@ -10,6 +10,7 @@ import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
 import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.dto.response.UpdateMemberResponse;
 import dankook.capstone.petalk.service.MemberService;
+import dankook.capstone.petalk.service.S3Uploader;
 import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,6 +32,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
+    private final S3Uploader s3Uploader;
 
     /**
      * 회원 조회
@@ -67,7 +70,8 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
     @PutMapping("/update")
-    public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
+    public ResponseData<UpdateMemberResponse> updateMember(@RequestParam("image") MultipartFile multipartFile,
+                                                           HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
         UpdateMemberResponse updateMemberResponse;
@@ -77,7 +81,9 @@ public class MemberController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            memberService.update(memberId,request.getName(),request.getPassword(),request.getEmail(),request.getProfileUrl());
+            String url = s3Uploader.upload(multipartFile, "static");
+
+            memberService.update(memberId, request.getName(), request.getPassword(), request.getEmail(), url);
             Member member = memberService.findOne(memberId);
 
             updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());

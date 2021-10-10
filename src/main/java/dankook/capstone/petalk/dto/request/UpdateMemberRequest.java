@@ -8,5 +8,4 @@ public class UpdateMemberRequest {
     private String nickname;
     private String password;
     private String email;
-    private String profileUrl;
 }
