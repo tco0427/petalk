@@ -83,7 +83,6 @@ public class VideoController {
                     String.class
             );
 
-
             uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
         } catch(MalformedURLException e){
