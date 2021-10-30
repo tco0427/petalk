@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class CreatePetRequest {
-    private Long memberId;
     private String petName;
     private Gender gender;
     private String petType;
