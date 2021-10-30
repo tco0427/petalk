@@ -32,6 +32,8 @@ public class Pet {
     @Enumerated(STRING)
     private Gender gender;
 
+    private String profileUrl;
+
     @Column(name="pettype")
     private String petType;
 
@@ -53,8 +55,9 @@ public class Pet {
         this.petAge = petAge;
     }
 
-    public Pet(Member member, String petName, Gender gender, String petType, Integer petAge) {
+    public Pet(Member member, String url, String petName, Gender gender, String petType, Integer petAge) {
         this.member = member;
+        this.profileUrl = url;
         this.petName = petName;
         this.gender = gender;
         this.petType = petType;

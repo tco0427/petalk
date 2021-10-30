@@ -12,6 +12,7 @@ import dankook.capstone.petalk.dto.response.CreatePetResponse;
 import dankook.capstone.petalk.dto.response.UpdatePetResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
+import dankook.capstone.petalk.service.S3Uploader;
 import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,6 +38,7 @@ public class PetController {
     private final PetService petService;
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
+    private final S3Uploader s3Uploader;
 
     /**
      * 펫 정보 생성
@@ -43,6 +46,7 @@ public class PetController {
     @ApiOperation(value = "", notes = "신규 펫 정보 생성")
     @PostMapping("/new")
     public ResponseData<CreatePetResponse> saveMember(HttpServletRequest httpServletRequest,
+                                                      @RequestParam("image") MultipartFile multipartFile,
                                                       @RequestBody @Valid CreatePetRequest request) {
         ResponseData<CreatePetResponse> responseData;
         CreatePetResponse createPetResponse = null;
@@ -52,13 +56,15 @@ public class PetController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
+            String url = s3Uploader.upload(multipartFile, "static");
+
             Member member = memberService.findOne(memberId);
 
-            Pet pet = new Pet(member, request.getPetName(), request.getGender(), request.getPetType(), request.getPetAge());
+            Pet pet = new Pet(member, url, request.getPetName(), request.getGender(), request.getPetType(), request.getPetAge());
 
             Long id = petService.join(pet);
 
-            createPetResponse = new CreatePetResponse(id,pet.getPetName(),pet.getGender(),pet.getPetType(),pet.getPetAge());
+            createPetResponse = new CreatePetResponse(id, pet.getPetName(), pet.getProfileUrl(), pet.getGender(),pet.getPetType(),pet.getPetAge());
 
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createPetResponse);
 
@@ -109,12 +115,14 @@ public class PetController {
     static class PetDto{
         private Long id;
         private String petName;
+        private String profileUrl;
         private Gender gender;
         private String petType;
         private Integer petAge;
 
         public PetDto(Pet pet){
             id = pet.getId();
+            profileUrl = pet.getProfileUrl();
             petName = pet.getPetName();
             gender = pet.getGender();
             petType = pet.getPetType();
