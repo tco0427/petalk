@@ -9,6 +9,7 @@ import lombok.Data;
 public class CreatePetResponse {
     private Long id;
     private String petName;
+    private String profileUrl;
     private Gender gender;
     private String petType;
     private Integer petAge;
