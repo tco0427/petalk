@@ -82,7 +82,7 @@ public class PetController {
      * 펫 정보 조회
      */
     @ApiOperation(value = "", notes = "회원 정보로 펫 정보 조회")
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public ResponseData<PetListDto> getPetById(HttpServletRequest httpServletRequest){
         ResponseData<PetListDto> responseData;
         PetListDto petListDto;
