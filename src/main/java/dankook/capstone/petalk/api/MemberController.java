@@ -68,7 +68,7 @@ public class MemberController {
      * 회원 수정
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
@@ -97,7 +97,7 @@ public class MemberController {
      * 비밀번호 변경
      */
     @ApiOperation(value = "", notes = "비밀번호 변경")
-    @PutMapping("/password/update")
+    @PostMapping("/password/update")
     public ResponseData<UpdatePasswordResponse> updatePassword(HttpServletRequest httpServletRequest,
                                                                @RequestBody @Valid UpdatePasswordRequest request) {
         ResponseData<UpdatePasswordResponse> responseData = null;
@@ -128,7 +128,7 @@ public class MemberController {
      * 프로필 이미지 변경
      */
     @ApiOperation(value = "", notes = "프로필 이미지 변경")
-    @PutMapping("/image/update")
+    @PostMapping("/image/update")
     public ResponseData<UpdateImageResponse> updateImageMember(@RequestParam("image") MultipartFile multipartFile, HttpServletRequest httpServletRequest) {
         ResponseData<UpdateImageResponse> responseData = null;
         UpdateImageResponse updateImageResponse;
