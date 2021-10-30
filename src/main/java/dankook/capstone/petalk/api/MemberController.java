@@ -82,7 +82,7 @@ public class MemberController {
             memberService.update(memberId, request.getName(), request.getNickname(), request.getEmail());
             Member member = memberService.findOne(memberId);
 
-            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getEmail(),member.getNickname());
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getNickname(),member.getEmail());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
