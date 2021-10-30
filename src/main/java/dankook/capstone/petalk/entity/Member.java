@@ -90,13 +90,15 @@ public class Member extends BaseEntity{
         this.profileUrl = profileUrl;
     }
 
-    public void updateMember(String name, String password, String email, String profileUrl){
+    public void updateMember(String name, String password, String email){
         if(name != null) {this.name = name;}
 
         if(password != null) {this.password = password;}
 
         if(email != null) {this.email = email;}
+    }
 
-        if(profileUrl != null) {this.profileUrl = profileUrl;}
+    public void updateImage(String url) {
+        if(url != null) {this.profileUrl = url;}
     }
 }

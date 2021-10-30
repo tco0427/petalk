@@ -4,6 +4,7 @@ import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.dto.response.DeleteMemberDto;
+import dankook.capstone.petalk.dto.response.UpdateImageResponse;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
@@ -70,8 +71,7 @@ public class MemberController {
      */
     @ApiOperation(value = "", notes = "회원 정보 수정")
     @PutMapping("/update")
-    public ResponseData<UpdateMemberResponse> updateMember(@RequestParam("image") MultipartFile multipartFile,
-                                                           HttpServletRequest httpServletRequest,
+    public ResponseData<UpdateMemberResponse> updateMember(HttpServletRequest httpServletRequest,
                                                            @RequestBody @Valid UpdateMemberRequest request){
         ResponseData<UpdateMemberResponse> responseData = null;
         UpdateMemberResponse updateMemberResponse;
@@ -81,16 +81,43 @@ public class MemberController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            String url = s3Uploader.upload(multipartFile, "static");
-
-            memberService.update(memberId, request.getName(), request.getPassword(), request.getEmail(), url);
+            memberService.update(memberId, request.getName(), request.getPassword(), request.getEmail());
             Member member = memberService.findOne(memberId);
 
-            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getProfileUrl(),member.getNickname());
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    /**
+     * 프로필 이미지 변경
+     */
+    @ApiOperation(value = "", notes = "프로필 이미지 변경")
+    @PutMapping("/image/update")
+    public ResponseData<UpdateImageResponse> updateImageMember(@RequestParam("image") MultipartFile multipartFile, HttpServletRequest httpServletRequest) {
+        ResponseData<UpdateImageResponse> responseData = null;
+        UpdateImageResponse updateImageResponse;
+
+        try {
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            String url = s3Uploader.upload(multipartFile, "static");
+
+            memberService.updateImage(memberId, url);
+
+            updateImageResponse = new UpdateImageResponse(memberId, url);
+
+        } catch(NoSuchElementException e) {
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        } catch(Exception e) {
             log.error(e.getMessage());
         }
 
