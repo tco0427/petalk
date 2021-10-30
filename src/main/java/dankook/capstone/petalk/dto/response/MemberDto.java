@@ -14,11 +14,13 @@ public class MemberDto {
     private String nickname;
     private String name;
     private String email;
+    private String profileUrl;
     private List<Pet> petList;
     private String token;
 
     public MemberDto(Member member){
         this.userId = member.getUserId();
+        this.profileUrl = member.getProfileUrl();
         this.nickname = member.getNickname();
         this.name = member.getName();
         this.email = member.getEmail();
