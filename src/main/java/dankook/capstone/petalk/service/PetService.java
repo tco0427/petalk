@@ -47,4 +47,9 @@ public class PetService {
     public void deleteById(Long id){
         petRepository.deleteById(id);
     }
+
+    @Transactional
+    public void deleteByPetName(String petName) {
+        petRepository.deleteByPetName(petName);
+    }
 }

@@ -62,13 +62,29 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(Long id, String name, String password, String email, String profileUrl){
+    public void updateImage(Long id, String url) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        password = passwordEncoder.encode(password);  //비밀번호 암호화
+        member.updateImage(url);
+    }
 
-        member.updateMember(name, password, email, profileUrl);
+    @Transactional
+    public void update(Long id, String name,String nickname, String email){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        member.updateMember(name, nickname, email);
+    }
+
+    @Transactional
+    public void updatePassword(Long id, String password) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        password = passwordEncoder.encode(password);
+
+        member.updatePassword(password);
     }
 
     @Transactional

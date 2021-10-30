@@ -12,6 +12,7 @@ import dankook.capstone.petalk.dto.response.CreatePetResponse;
 import dankook.capstone.petalk.dto.response.UpdatePetResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.PetService;
+import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -33,19 +35,24 @@ public class PetController {
 
     private final PetService petService;
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
     /**
      * 펫 정보 생성
      */
-
     @ApiOperation(value = "", notes = "신규 펫 정보 생성")
     @PostMapping("/new")
-    public ResponseData<CreatePetResponse> saveMember(@RequestBody @Valid CreatePetRequest request) {
+    public ResponseData<CreatePetResponse> saveMember(HttpServletRequest httpServletRequest,
+                                                      @RequestBody @Valid CreatePetRequest request) {
         ResponseData<CreatePetResponse> responseData;
         CreatePetResponse createPetResponse = null;
 
         try {
-            Member member = memberService.findOne(request.getMemberId());
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            Member member = memberService.findOne(memberId);
 
             Pet pet = new Pet(member, request.getPetName(), request.getGender(), request.getPetType(), request.getPetAge());
 
@@ -70,14 +77,16 @@ public class PetController {
      */
     @ApiOperation(value = "", notes = "회원 정보로 펫 정보 조회")
     @GetMapping("/{id}")
-    public ResponseData<PetListDto> getPetById(@PathVariable("id") Long id){
-        log.info("getPetByMemberId : "+id);
-
+    public ResponseData<PetListDto> getPetById(HttpServletRequest httpServletRequest){
         ResponseData<PetListDto> responseData;
         PetListDto petListDto;
 
         try{
-            Member findMember = memberService.findOne(id);
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            Member findMember = memberService.findOne(memberId);
 
             List<Pet> petList = findMember.getPetList();
 
@@ -125,41 +134,18 @@ public class PetController {
     }
 
     /**
-     * 펫 정보 수정
-     */
-    @ApiOperation(value = "", notes = "펫 정보 수정")
-    @PutMapping("/{id}")
-    public ResponseData<UpdatePetResponse> updatePet(@PathVariable("id") Long id,
-                                                     @RequestBody @Valid UpdatePetRequest request){
-        ResponseData<UpdatePetResponse> responseData = null;
-        UpdatePetResponse updatePetResponse;
-        try{
-            petService.update(id,request.getPetName(),request.getGender(),request.getPetType(),request.getPetAge());
-            Pet pet = petService.findOne(id);
-
-            updatePetResponse = new UpdatePetResponse(pet.getId(),pet.getPetName(),pet.getGender(),pet.getPetType(),pet.getPetAge());
-            responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updatePetResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_PET, null);
-            log.error(e.getMessage());
-        }catch(Exception e){
-            log.error(e.getMessage());
-        }
-        return responseData;
-    }
-
-    /**
      * 펫 정보 삭제
      */
     @ApiOperation(value = "", notes = "펫 정보 삭제")
-    @DeleteMapping("/{id}")
-    public ResponseData<DeletePetDto> deletePet(@PathVariable("id") Long id){
+    @DeleteMapping("/{name}")
+    public ResponseData<DeletePetDto> deletePet(HttpServletRequest httpServletRequest,
+                                                @PathVariable("name") String petName){
         ResponseData<DeletePetDto> responseData = null;
         try{
-            petService.deleteById(id);
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(id));
+            petService.deleteByPetName(petName);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(petName));
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(id));
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(petName));
             log.error(e.getMessage());
         }
         return responseData;
@@ -169,6 +155,6 @@ public class PetController {
     @Data
     @AllArgsConstructor
     static class DeletePetDto{
-        private Long id;
+        private String petName;
     }
 }
