@@ -70,13 +70,21 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(Long id, String name, String password, String email){
+    public void update(Long id, String name,String nickname, String email){
         Member member = memberRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        password = passwordEncoder.encode(password);  //비밀번호 암호화
+        member.updateMember(name, nickname, email);
+    }
 
-        member.updateMember(name, password, email);
+    @Transactional
+    public void updatePassword(Long id, String password) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        password = passwordEncoder.encode(password);
+
+        member.updatePassword(password);
     }
 
     @Transactional

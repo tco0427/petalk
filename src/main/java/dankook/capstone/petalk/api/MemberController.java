@@ -3,13 +3,11 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
-import dankook.capstone.petalk.dto.response.DeleteMemberDto;
-import dankook.capstone.petalk.dto.response.UpdateImageResponse;
+import dankook.capstone.petalk.dto.request.UpdatePasswordRequest;
+import dankook.capstone.petalk.dto.response.*;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.request.UpdateMemberRequest;
-import dankook.capstone.petalk.dto.response.MemberDto;
-import dankook.capstone.petalk.dto.response.UpdateMemberResponse;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.service.S3Uploader;
 import dankook.capstone.petalk.util.JwtUtil;
@@ -81,14 +79,45 @@ public class MemberController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            memberService.update(memberId, request.getName(), request.getPassword(), request.getEmail());
+            memberService.update(memberId, request.getName(), request.getNickname(), request.getEmail());
             Member member = memberService.findOne(memberId);
 
-            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getPassword(),member.getEmail(),member.getNickname());
+            updateMemberResponse = new UpdateMemberResponse(member.getId(),member.getName(),member.getEmail(),member.getNickname());
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,updateMemberResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }catch(Exception e){
+            log.error(e.getMessage());
+        }
+
+        return responseData;
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @ApiOperation(value = "", notes = "비밀번호 변경")
+    @PutMapping("/password/update")
+    public ResponseData<UpdatePasswordResponse> updatePassword(HttpServletRequest httpServletRequest,
+                                                               @RequestBody @Valid UpdatePasswordRequest request) {
+        ResponseData<UpdatePasswordResponse> responseData = null;
+        UpdatePasswordResponse updatePasswordResponse;
+
+        try{
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            Member member = memberService.findOne(memberId);
+
+            if(memberService.validateMember(member, request.getOldPassword())){
+                memberService.updatePassword(memberId, request.getNewPassword());
+                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, null);
+            }else {throw new NoSuchElementException();}
+
+        }catch(NoSuchElementException e) {
+            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
+        }catch(Exception e) {
             log.error(e.getMessage());
         }
 
