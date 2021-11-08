@@ -101,7 +101,6 @@ public class MemberController {
     public ResponseData<UpdatePasswordResponse> updatePassword(HttpServletRequest httpServletRequest,
                                                                @RequestBody @Valid UpdatePasswordRequest request) {
         ResponseData<UpdatePasswordResponse> responseData = null;
-        UpdatePasswordResponse updatePasswordResponse;
 
         try{
             String token = jwtUtil.getTokenByHeader(httpServletRequest);
@@ -112,7 +111,7 @@ public class MemberController {
 
             if(memberService.validateMember(member, request.getOldPassword())){
                 memberService.updatePassword(memberId, request.getNewPassword());
-                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, null);
+                responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new UpdatePasswordResponse(memberId));
             }else {throw new NoSuchElementException();}
 
         }catch(NoSuchElementException e) {
