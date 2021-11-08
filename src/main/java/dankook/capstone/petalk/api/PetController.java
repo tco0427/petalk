@@ -46,8 +46,7 @@ public class PetController {
     @ApiOperation(value = "", notes = "신규 펫 정보 생성")
     @PostMapping("/new")
     public ResponseData<CreatePetResponse> saveMember(HttpServletRequest httpServletRequest,
-                                                      @RequestParam("image") MultipartFile multipartFile,
-                                                      @RequestBody @Valid CreatePetRequest request) {
+                                                      @ModelAttribute CreatePetRequest request) {
         ResponseData<CreatePetResponse> responseData;
         CreatePetResponse createPetResponse = null;
 
@@ -56,7 +55,11 @@ public class PetController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            String url = s3Uploader.upload(multipartFile, "static");
+            String url = null;
+
+            if(request.getImage() != null) {
+                s3Uploader.upload(request.getImage(),"static");
+            }
 
             Member member = memberService.findOne(memberId);
 
