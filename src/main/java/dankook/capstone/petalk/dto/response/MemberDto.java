@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class MemberDto {
+    private Long memberId;
     private String userId;
     private String nickname;
     private String name;
@@ -17,6 +18,7 @@ public class MemberDto {
     private String token;
 
     public MemberDto(Member member){
+        this.memberId = member.getId();
         this.userId = member.getUserId();
         this.nickname = member.getNickname();
         this.name = member.getName();
@@ -24,6 +26,7 @@ public class MemberDto {
     }
 
     public MemberDto(Member member, String token){
+        this.memberId = member.getId();
         this.userId = member.getUserId();
         this.nickname = member.getNickname();
         this.name = member.getName();
