@@ -148,15 +148,15 @@ public class PetController {
      * 펫 정보 삭제
      */
     @ApiOperation(value = "", notes = "펫 정보 삭제")
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/{id}")
     public ResponseData<DeletePetDto> deletePet(HttpServletRequest httpServletRequest,
-                                                @PathVariable("name") String petName){
+                                                @PathVariable("id") Long id){
         ResponseData<DeletePetDto> responseData = null;
         try{
-            petService.deleteByPetName(petName);
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(petName));
+            petService.deleteById(id);
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,new DeletePetDto(id));
         }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(petName));
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.NOT_FOUND_PET,new DeletePetDto(id));
             log.error(e.getMessage());
         }
         return responseData;
@@ -166,6 +166,6 @@ public class PetController {
     @Data
     @AllArgsConstructor
     static class DeletePetDto{
-        private String petName;
+        private Long id;
     }
 }
