@@ -57,7 +57,7 @@ public class PetController {
 
             String url = null;
 
-            if(request.getImage() != null) {
+            if(request.getImage().isEmpty() == false) {
                 url = s3Uploader.upload(request.getImage(),"static");
             }
 
