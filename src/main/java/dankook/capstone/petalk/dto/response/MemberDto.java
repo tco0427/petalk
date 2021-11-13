@@ -13,6 +13,7 @@ public class MemberDto {
     private Long memberId;
     private String userId;
     private String nickname;
+    private String profileUrl;
     private String name;
     private String email;
     private String token;
@@ -21,6 +22,7 @@ public class MemberDto {
         this.memberId = member.getId();
         this.userId = member.getUserId();
         this.nickname = member.getNickname();
+        this.profileUrl = member.getProfileUrl();
         this.name = member.getName();
         this.email = member.getEmail();
     }
@@ -29,6 +31,7 @@ public class MemberDto {
         this.memberId = member.getId();
         this.userId = member.getUserId();
         this.nickname = member.getNickname();
+        this.profileUrl = member.getProfileUrl();
         this.name = member.getName();
         this.email = member.getEmail();
         this.token = token;
