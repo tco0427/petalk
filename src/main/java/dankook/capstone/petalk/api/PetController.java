@@ -57,9 +57,12 @@ public class PetController {
 
             String url = null;
 
-            if(request.getImage().isEmpty() == false) {
+            if(request.getImage().getName() == null) {
                 url = s3Uploader.upload(request.getImage(),"static");
             }
+//            if(request.getImage().isEmpty() == false) {
+//                url = s3Uploader.upload(request.getImage(),"static");
+//            }
 
             Member member = memberService.findOne(memberId);
 
