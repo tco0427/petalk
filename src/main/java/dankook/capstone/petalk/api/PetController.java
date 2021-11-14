@@ -51,21 +51,16 @@ public class PetController {
         CreatePetResponse createPetResponse = null;
 
         try {
+
             String token = jwtUtil.getTokenByHeader(httpServletRequest);
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
             String url = null;
 
-            url = s3Uploader.upload(request.getImage(),"static");
-
-//            if(request.getImage().getName() == null) {
-//                System.out.println("getName(): "+ request.getImage().getName());
-//                url = s3Uploader.upload(request.getImage(),"static");
-//            }
-//            if(request.getImage().isEmpty() == false) {
-//                url = s3Uploader.upload(request.getImage(),"static");
-//            }
+            if(request.getImage() != null) {
+                url = s3Uploader.upload(request.getImage(),"static");
+            }
 
             Member member = memberService.findOne(memberId);
 
@@ -78,25 +73,11 @@ public class PetController {
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createPetResponse);
 
         }catch(IllegalArgumentException e){
-            String token = jwtUtil.getTokenByHeader(httpServletRequest);
-            jwtUtil.isValidToken(token);
-            Long memberId = jwtUtil.getMemberIdByToken(token);
-
-            Member member = memberService.findOne(memberId);
-
-            String url = null;
-
-            Pet pet = new Pet(member, url, request.getPetName(), request.getGender(), request.getPetType(), request.getPetAge());
-
-            Long id = petService.join(pet);
-
-            createPetResponse = new CreatePetResponse(id, pet.getPetName(), pet.getProfileUrl(), pet.getGender(),pet.getPetType(),pet.getPetAge());
-
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL, createPetResponse);
-            log.error(e.getMessage());
+            log.error("IllegalArgumentException: ", e);
         }catch(Exception e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.PET_CREATION_FAIL, null);
-            log.error(e.getMessage());
+            log.error("Exception: ",e);
         }
         return responseData;
     }

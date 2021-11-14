@@ -50,7 +50,7 @@ public class VideoController {
 
     @ApiOperation(value = "", notes = "동영상 S3에 업로드하기")
     @PostMapping("/upload")
-    public ResponseData<UploadVideoResponse> upload(@RequestParam("video") MultipartFile multipartFile, HttpServletRequest httpServletRequest) {
+    public ResponseData<UploadVideoResponse> upload(@RequestParam(value="video", required = false) MultipartFile multipartFile, HttpServletRequest httpServletRequest) {
         ResponseData<UploadVideoResponse> responseData = null;
         UploadVideoResponse uploadVideoResponse;
 
