@@ -86,10 +86,10 @@ public class VideoController {
             uploadVideoResponse = new UploadVideoResponse(videoId, url);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, uploadVideoResponse);
         } catch(MalformedURLException e){
-            log.error(e.getMessage());
+            log.error("MalformedURLException: ", e);
         } catch(IOException e){
             responseData = new ResponseData<>(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_UPLOAD_VIDEO, null);
-            log.error(e.getMessage());
+            log.error("IOException: ", e);
         } catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER, null);
         }
@@ -112,9 +112,9 @@ public class VideoController {
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, videoEmotionResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_VIDEO, null);
-            log.error(e.getMessage());
+            log.error("NoSuchElementException: ", e);
         }catch(Exception e){
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return responseData;
     }
