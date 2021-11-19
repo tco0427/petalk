@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateCommentRequest {
-    private Long memberId;
     private Long communityId;
     private String content;
 }

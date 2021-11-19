@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateCommunityRequest {
-    private Long memberId;
     private String title;
     private String content;
 }

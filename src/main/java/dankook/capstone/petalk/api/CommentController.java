@@ -13,6 +13,7 @@ import dankook.capstone.petalk.dto.response.UpdateCommentResponse;
 import dankook.capstone.petalk.service.CommentService;
 import dankook.capstone.petalk.service.CommunityService;
 import dankook.capstone.petalk.service.MemberService;
+import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
@@ -32,15 +34,20 @@ public class CommentController {
     private final CommentService commentService;
     private final MemberService memberService;
     private final CommunityService communityService;
+    private final JwtUtil jwtUtil;
 
     @ApiOperation(value = "", notes = "comment 생성")
     @PostMapping("/new")
-    public ResponseData<CreateCommentResponse> createComment(@RequestBody @Valid CreateCommentRequest request){
+    public ResponseData<CreateCommentResponse> createComment(HttpServletRequest httpServletRequest, @RequestBody @Valid CreateCommentRequest request){
         ResponseData<CreateCommentResponse> responseData = null;
         CreateCommentResponse createCommentResponse;
 
         try{
-            Member member = memberService.findOne(request.getMemberId());
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            Member member = memberService.findOne(memberId);
             Community community = communityService.findOne(request.getCommunityId());
             String content = request.getContent();
 
@@ -52,9 +59,9 @@ public class CommentController {
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, createCommentResponse);
         }catch(NoSuchElementException e){
             responseData = new ResponseData<>(StatusCode.UNAUTHORIZED, ResponseMessage.COMMENT_CREATION_FAIL, null);
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }catch(Exception e){
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return responseData;
@@ -62,14 +69,23 @@ public class CommentController {
 
     @ApiOperation(value = "", notes = "댓글 삭제")
     @DeleteMapping("/{id}")
-    public ResponseData<DeleteCommentDto> deleteComment(@PathVariable("id") Long id){
+    public ResponseData<DeleteCommentDto> deleteComment(HttpServletRequest httpServletRequest, @PathVariable("id") Long id){
         ResponseData<DeleteCommentDto> responseData = null;
 
         try{
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+            Long memberId = jwtUtil.getMemberIdByToken(token);
+
+            commentService.checkMember(memberId, id);
+
             commentService.deleteById(id);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new DeleteCommentDto(id));
-        }catch(NoSuchElementException e){
+        }catch(NoSuchElementException e) {
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMENT, null);
+        }catch(IllegalAccessException e) {
+            log.error("IllegalAccessException", e);
+            responseData = new ResponseData<>(StatusCode.UNAUTHORIZED, ResponseMessage.FAIL_DELETE_COMMUNITY, null);
         }
 
         return responseData;

@@ -84,7 +84,6 @@ public class CommunityController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-
             Long communityId = communityService.findOne(id).getId();
 
             communityService.checkMember(memberId, communityId);

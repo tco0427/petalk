@@ -37,4 +37,10 @@ public class CommentService {
 
         comment.setContent(content);
     }
+
+    public void checkMember(Long memberId, Long commentId) throws IllegalAccessException {
+        if(memberId != commentId) {
+            throw new IllegalAccessException();
+        }
+    }
 }
