@@ -54,4 +54,10 @@ public class CommunityService {
 
         return communityRepository.findAllBy(pageRequest);
     }
+
+    public void checkMember(Long memberId, Long communityId) throws IllegalAccessException {
+        if(memberId != communityId) {
+            throw new IllegalAccessException();
+        }
+    }
 }
