@@ -97,7 +97,7 @@ public class AuthController {
 
             return new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new ValidTokenResponse(token));
         }catch(JwtException e) {
-            return ResponseData<>(StatusCode.UNAUTHORIZED, e.getMessage(), new ValidTokenResponse(token));
+            return new ResponseData<>(StatusCode.UNAUTHORIZED, e.getMessage(), null);
         }
     }
 
