@@ -3,16 +3,20 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
+import dankook.capstone.petalk.dto.request.KakaoRequest;
 import dankook.capstone.petalk.dto.request.SignInRequest;
+import dankook.capstone.petalk.dto.response.AuthResponse;
 import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
+import dankook.capstone.petalk.service.AuthService;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.util.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +34,7 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
     private final MemberService memberService;
+    private final AuthService authService;
 
     @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/signup")
@@ -80,5 +85,10 @@ public class AuthController {
         }
 
         return responseData;
+    }
+
+    @PostMapping("/kakao")
+    public ResponseEntity<AuthResponse> loginWithKakao(@RequestBody KakaoRequest kakaoRequest) {
+        return ResponseEntity.ok(authService.loginWithKakao(kakaoRequest.getCode()));
     }
 }

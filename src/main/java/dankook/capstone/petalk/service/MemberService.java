@@ -1,6 +1,7 @@
 package dankook.capstone.petalk.service;
 
 import dankook.capstone.petalk.entity.Member;
+import dankook.capstone.petalk.entity.PlatformType;
 import dankook.capstone.petalk.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) //읽기만 하는 경우 readOnly를 true해주는게 성능상 이점이 있음
@@ -90,6 +92,16 @@ public class MemberService {
     @Transactional
     public void deleteById(Long id){
         memberRepository.deleteById(id);
+    }
+
+    public Member findByPlatformTypeAndPlatformId(PlatformType platformType, String platformId)
+    {
+        Optional<Member> optionalUser = memberRepository.findByPlatformTypeAndPlatformId(platformType, platformId);
+        if(optionalUser.isEmpty()){
+            return null;
+        }
+
+        return optionalUser.get();
     }
 }
 

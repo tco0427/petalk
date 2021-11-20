@@ -1,5 +1,6 @@
 package dankook.capstone.petalk.entity;
 
+import dankook.capstone.petalk.dto.response.OAuthResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -38,7 +39,7 @@ public class Member extends BaseEntity{
     @Enumerated(STRING)
     private PlatformCode platformCode;
 
-    private Integer platformId;
+    private String platformId;
 
     @OneToMany(mappedBy = "member")
     private List<Pet> petList = new ArrayList<>();
@@ -53,14 +54,14 @@ public class Member extends BaseEntity{
         this.password = password;
     }
 
-    public Member(String name, String profileUrl, PlatformCode platformCode, Integer platformId) {
+    public Member(String name, String profileUrl, PlatformCode platformCode, String platformId) {
         this.name = name;
         this.profileUrl = profileUrl;
         this.platformCode = platformCode;
         this.platformId = platformId;
     }
 
-    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, Integer platformId) {
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, String platformId) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -88,6 +89,14 @@ public class Member extends BaseEntity{
         this.nickname = nickname;
         this.email = email;
         this.profileUrl = profileUrl;
+    }
+
+    public Member(OAuthResponse oAuthResponse){
+        this.platformId = oAuthResponse.getPlatformId();
+        this.name = oAuthResponse.getNickname();
+        this.nickname = oAuthResponse.getNickname();
+        this.email = oAuthResponse.getEmail();
+        this.profileUrl = oAuthResponse.getProfileImageUrl();
     }
 
     public void updateMember(String name, String nickname, String email){
