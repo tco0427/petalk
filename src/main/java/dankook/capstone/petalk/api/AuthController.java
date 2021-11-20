@@ -7,20 +7,19 @@ import dankook.capstone.petalk.dto.request.KakaoRequest;
 import dankook.capstone.petalk.dto.request.SignInRequest;
 import dankook.capstone.petalk.dto.response.AuthResponse;
 import dankook.capstone.petalk.dto.response.MemberDto;
+import dankook.capstone.petalk.dto.response.ValidTokenResponse;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
 import dankook.capstone.petalk.service.AuthService;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,8 +38,6 @@ public class AuthController {
     @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/signup")
     public ResponseData<SignUpResponse> singUp(@RequestBody SignUpRequest request){
-        log.info(request.toString());
-
         ResponseData<SignUpResponse> responseData = null;
 
         try{
@@ -89,6 +86,19 @@ public class AuthController {
 
     @PostMapping("/kakao")
     public ResponseEntity<AuthResponse> loginWithKakao(@RequestBody KakaoRequest kakaoRequest) {
-        return ResponseEntity.ok(authService.loginWithKakao(kakaoRequest.getCode()));
+        return ResponseEntity.ok(authService.loginWithKakao(kakaoRequest));
     }
+
+    @PostMapping("/token")
+    public ResponseData<ValidTokenResponse> checkToken(HttpServletRequest httpServletRequest){
+        try {
+            String token = jwtUtil.getTokenByHeader(httpServletRequest);
+            jwtUtil.isValidToken(token);
+
+            return new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new ValidTokenResponse(token));
+        }catch(JwtException e) {
+            return ResponseData<>(StatusCode.UNAUTHORIZED, e.getMessage(), new ValidTokenResponse(token));
+        }
+    }
+
 }

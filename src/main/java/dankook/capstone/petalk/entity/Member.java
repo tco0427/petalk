@@ -61,6 +61,14 @@ public class Member extends BaseEntity{
         this.platformId = platformId;
     }
 
+    public Member(Integer platfromId, String nickname, String profileUrl, String email) {
+        this.platformId = platfromId;
+        this.name = nickname;
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+        this.email = email;
+    }
+
     public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.userId = userId;
         this.password = password;

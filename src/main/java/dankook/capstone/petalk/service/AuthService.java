@@ -1,8 +1,13 @@
 package dankook.capstone.petalk.service;
 
+import dankook.capstone.petalk.data.ResponseData;
+import dankook.capstone.petalk.data.ResponseMessage;
+import dankook.capstone.petalk.data.StatusCode;
+import dankook.capstone.petalk.dto.request.KakaoRequest;
 import dankook.capstone.petalk.dto.response.AuthResponse;
 import dankook.capstone.petalk.dto.response.MemberDto;
 import dankook.capstone.petalk.dto.response.OAuthResponse;
+import dankook.capstone.petalk.dto.response.SignUpResponse;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,30 +19,35 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final KakaoService kakaoService;
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
-    public AuthResponse loginWithKakao(String code) {
-        AuthResponse authResponse = new AuthResponse();
+    public AuthResponse loginWithKakao(KakaoRequest request) {
 
-        try {
-            // 1. 코드 값으로 토큰 구하기
-            String token = kakaoService.getTokenByCode(code);
+        AuthResponse authResponse = null;
+        boolean isUser = false;
 
-            // 2. 토큰값으로 카카오 정보 구하기
-            OAuthResponse oAuthResponse = kakaoService.getKakaoUserInfoByToken(token);
+        try{
+            Member memberByPlatformId = memberService.findByPlatformId(request.getPlatformId());
+            if(memberByPlatformId != null) {
+                isUser = true;
+            }
 
-            Member member = new Member(oAuthResponse);
+            if(!isUser){
+                Member member = request.toMemberEntity();
 
-            memberService.join(member);
+                Long savedMemberId = memberService.join(member);
 
-            MemberDto memberDto = new MemberDto(member);
+                String token = jwtUtil.generateToken(savedMemberId, member.getPlatformId());
 
-            authResponse.setToken(token);
-            authResponse.setMemberDto(memberDto);
+                MemberDto memberDto = new MemberDto(member);
 
-            return authResponse;
-        } catch (Exception e) {
+                authResponse = new AuthResponse(token, memberDto);
+            }
+
+        } catch(IllegalArgumentException e){
+            log.error(e.getMessage(), e);
+        } catch(Exception e){
             log.error(e.getMessage(), e);
         }
 
