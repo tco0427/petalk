@@ -83,7 +83,8 @@ public class KakaoService {
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(result);
 
-        String platformId = element.getAsJsonObject().get("id").getAsString();
+        Integer platformId = Integer.parseInt(element.getAsJsonObject().get("id").getAsString());
+
 
         JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
 

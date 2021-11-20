@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class OAuthResponse {
     private PlatformType platformType;
 
-    private String platformId;
+    private Integer platformId;
 
     private String nickname;
 

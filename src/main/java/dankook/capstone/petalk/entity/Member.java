@@ -39,7 +39,7 @@ public class Member extends BaseEntity{
     @Enumerated(STRING)
     private PlatformCode platformCode;
 
-    private String platformId;
+    private Integer platformId;
 
     @OneToMany(mappedBy = "member")
     private List<Pet> petList = new ArrayList<>();
@@ -54,14 +54,14 @@ public class Member extends BaseEntity{
         this.password = password;
     }
 
-    public Member(String name, String profileUrl, PlatformCode platformCode, String platformId) {
+    public Member(String name, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.name = name;
         this.profileUrl = profileUrl;
         this.platformCode = platformCode;
         this.platformId = platformId;
     }
 
-    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, String platformId) {
+    public Member(String userId, String password, String name, String nickname, String email, String profileUrl, PlatformCode platformCode, Integer platformId) {
         this.userId = userId;
         this.password = password;
         this.name = name;

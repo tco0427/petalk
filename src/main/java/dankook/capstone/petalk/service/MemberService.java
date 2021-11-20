@@ -94,9 +94,9 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public Member findByPlatformTypeAndPlatformId(PlatformType platformType, String platformId)
+    public Member findByPlatformId(Integer platformId)
     {
-        Optional<Member> optionalUser = memberRepository.findByPlatformTypeAndPlatformId(platformType, platformId);
+        Optional<Member> optionalUser = memberRepository.findByPlatformId(platformId);
         if(optionalUser.isEmpty()){
             return null;
         }
