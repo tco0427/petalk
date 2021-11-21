@@ -31,7 +31,6 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
     private final MemberService memberService;
-    private final AuthService authService;
 
     @ApiOperation(value = "", notes = "신규 회원 생성")
     @PostMapping("/signup")
