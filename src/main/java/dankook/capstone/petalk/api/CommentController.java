@@ -3,6 +3,7 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
+import dankook.capstone.petalk.dto.response.CommunityDto;
 import dankook.capstone.petalk.entity.Comment;
 import dankook.capstone.petalk.entity.Community;
 import dankook.capstone.petalk.entity.Member;
@@ -97,27 +98,47 @@ public class CommentController {
         private Long id;
     }
 
-    @ApiOperation(value = "", notes = "댓글 수정")
-    @PutMapping("/{id}")
-    public ResponseData<UpdateCommentResponse> updateComment(@PathVariable("id") Long id,
-                                                             @RequestBody @Valid UpdateCommentRequest request){
-        ResponseData<UpdateCommentResponse> responseData = null;
-        UpdateCommentResponse updateCommentResponse;
+    @ApiOperation(value = "", notes = "댓글 리스트 조회")
+    @GetMapping("/{communityId}")
+    public ResponseData<CommunityDto> getCommentList(@PathVariable("communityId") Long id) {
+        ResponseData<CommunityDto> responseData = null;
+        CommunityDto communityDto;
 
         try{
-            commentService.update(id, request.getContent());
+            Community community = communityService.findOne(id);
 
-            Comment comment = commentService.findOne(id);
+            communityDto = new CommunityDto(community);
 
-            updateCommentResponse = new UpdateCommentResponse(id, comment.getCommunity().getId(), comment.getContent());
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, updateCommentResponse);
-        }catch(NoSuchElementException e){
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, communityDto);
+        }catch(NoSuchElementException e) {
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMENT, null);
-            log.error(e.getMessage());
-        }catch(Exception e){
-            e.getMessage();
         }
 
         return responseData;
     }
+
+
+//    @ApiOperation(value = "", notes = "댓글 수정")
+//    @PutMapping("/{id}")
+//    public ResponseData<UpdateCommentResponse> updateComment(@PathVariable("id") Long id,
+//                                                             @RequestBody @Valid UpdateCommentRequest request){
+//        ResponseData<UpdateCommentResponse> responseData = null;
+//        UpdateCommentResponse updateCommentResponse;
+//
+//        try{
+//            commentService.update(id, request.getContent());
+//
+//            Comment comment = commentService.findOne(id);
+//
+//            updateCommentResponse = new UpdateCommentResponse(id, comment.getCommunity().getId(), comment.getContent());
+//            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, updateCommentResponse);
+//        }catch(NoSuchElementException e){
+//            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMENT, null);
+//            log.error(e.getMessage());
+//        }catch(Exception e){
+//            e.getMessage();
+//        }
+//
+//        return responseData;
+//    }
 }

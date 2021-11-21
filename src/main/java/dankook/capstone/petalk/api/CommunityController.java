@@ -3,6 +3,7 @@ package dankook.capstone.petalk.api;
 import dankook.capstone.petalk.data.ResponseData;
 import dankook.capstone.petalk.data.ResponseMessage;
 import dankook.capstone.petalk.data.StatusCode;
+import dankook.capstone.petalk.dto.response.CommunityDto;
 import dankook.capstone.petalk.entity.Comment;
 import dankook.capstone.petalk.entity.Community;
 import dankook.capstone.petalk.entity.Member;
@@ -107,59 +108,6 @@ public class CommunityController {
     }
 
     /**
-     * 게시글 조회(검색)
-     */
-    @ApiOperation(value = "", notes = "게시글 검색")
-    @GetMapping("/{id}")
-    public ResponseData<CommunityDto> getCommunity(@PathVariable("id") Long id){
-        ResponseData<CommunityDto> responseData = null;
-        CommunityDto communityDto = null;
-
-        try{
-            Community community = communityService.findOne(id);
-            communityDto = new CommunityDto(community);
-
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, communityDto);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
-        }catch(Exception e){
-            log.error(e.getMessage());
-        }
-        return responseData;
-    }
-
-    @Data
-    static class CommunityDto{
-        private Long id;
-        private String writer;
-        private String title;
-        private String content;
-        private List<CommentDto> commentList;
-
-        public CommunityDto(Community community){
-            this.id = community.getId();
-            this.writer = community.getMember().getNickname();
-            this.title = community.getTitle();
-            this.content = community.getContent();
-            this.commentList = community.getCommentList().stream()
-                    .map(comment -> new CommentDto(comment))
-                    .collect(toList());
-        }
-    }
-
-    @Data
-    static class CommentDto{
-        private String writer;
-        private String content;
-
-        public CommentDto(Comment comment){
-            this.writer = comment.getMember().getNickname();
-            this.content = comment.getContent();
-        }
-    }
-
-
-    /**
      * 게시글 조회(페이징)
      */
     @ApiOperation(value = "", notes = "게시글 조회 with 페이징")
@@ -192,32 +140,53 @@ public class CommunityController {
         private List<CommunityDto> communityDtos;
     }
 
-    /**
-     * 게시글 내용 수정
-     */
+//    /**
+//     * 게시글 조회(검색)
+//     */
+//    @ApiOperation(value = "", notes = "게시글 검색")
+//    @GetMapping("/{id}")
+//    public ResponseData<CommunityDto> getCommunity(@PathVariable("id") Long id){
+//        ResponseData<CommunityDto> responseData = null;
+//        CommunityDto communityDto = null;
+//
+//        try{
+//            Community community = communityService.findOne(id);
+//            communityDto = new CommunityDto(community);
+//
+//            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, communityDto);
+//        }catch(NoSuchElementException e){
+//            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
+//        }catch(Exception e){
+//            log.error(e.getMessage());
+//        }
+//        return responseData;
+//    }
 
-    @ApiOperation(value = "", notes = "게시글 수정")
-    @PutMapping("/{id}")
-    public ResponseData<UpdateCommunityResponse> updateCommunity(@PathVariable("id") Long id,
-                                                                 @RequestBody @Valid UpdateCommunityRequest request){
-        ResponseData<UpdateCommunityResponse> responseData = null;
-        UpdateCommunityResponse updateCommunityResponse;
-
-        try{
-            communityService.update(id,request.getContent());
-
-            Community community = communityService.findOne(id);
-
-            updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent());
-
-            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,updateCommunityResponse);
-        }catch(NoSuchElementException e){
-            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
-            log.error(e.getMessage());
-        }catch(Exception e){
-            log.error(e.getMessage());
-        }
-
-        return responseData;
-    }
+//    /**
+//     * 게시글 내용 수정
+//     */
+//    @ApiOperation(value = "", notes = "게시글 수정")
+//    @PutMapping("/{id}")
+//    public ResponseData<UpdateCommunityResponse> updateCommunity(@PathVariable("id") Long id,
+//                                                                 @RequestBody @Valid UpdateCommunityRequest request){
+//        ResponseData<UpdateCommunityResponse> responseData = null;
+//        UpdateCommunityResponse updateCommunityResponse;
+//
+//        try{
+//            communityService.update(id,request.getContent());
+//
+//            Community community = communityService.findOne(id);
+//
+//            updateCommunityResponse = new UpdateCommunityResponse(id,community.getMember().getId(),community.getTitle(),community.getContent());
+//
+//            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS,updateCommunityResponse);
+//        }catch(NoSuchElementException e){
+//            responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMUNITY, null);
+//            log.error(e.getMessage());
+//        }catch(Exception e){
+//            log.error(e.getMessage());
+//        }
+//
+//        return responseData;
+//    }
 }
