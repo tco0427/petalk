@@ -50,7 +50,7 @@ public class CommunityService {
 //    }
 
     public Slice<Community> findAllBySlice(int page){
-        PageRequest pageRequest = PageRequest.of(page,10);
+        PageRequest pageRequest = PageRequest.of(page,5);
 
         return communityRepository.findAllBy(pageRequest);
     }
