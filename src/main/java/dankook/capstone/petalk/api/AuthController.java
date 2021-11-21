@@ -11,14 +11,12 @@ import dankook.capstone.petalk.dto.response.ValidTokenResponse;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.dto.request.SignUpRequest;
 import dankook.capstone.petalk.dto.response.SignUpResponse;
-import dankook.capstone.petalk.service.AuthService;
 import dankook.capstone.petalk.service.MemberService;
 import dankook.capstone.petalk.util.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,8 +83,47 @@ public class AuthController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<AuthResponse> loginWithKakao(@RequestBody KakaoRequest kakaoRequest) {
-        return ResponseEntity.ok(authService.loginWithKakao(kakaoRequest));
+    public ResponseData<AuthResponse> loginWithKakao(@RequestBody KakaoRequest request) {
+        ResponseData<AuthResponse> responseData = null;
+        AuthResponse authResponse;
+        boolean isUser = false;
+
+        try{
+            Member memberByPlatformId = memberService.findByPlatformId(request.getPlatformId());
+
+            if(memberByPlatformId != null) {
+                isUser = true;
+            }
+
+            if(!isUser) {
+                Member member = request.toMemberEntity();
+
+                Long savedMemberId = memberService.join(member);
+
+                String token = jwtUtil.generateToken(savedMemberId, member.getPlatformId());
+
+                MemberDto memberDto = new MemberDto(member);
+
+                authResponse = new AuthResponse(token, memberDto);
+            }else{
+                String token = jwtUtil.generateToken(memberByPlatformId.getId(), memberByPlatformId.getPlatformId());
+
+                MemberDto memberDto = new MemberDto(memberByPlatformId);
+
+                authResponse = new AuthResponse(token, memberDto);
+            }
+
+            responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, authResponse);
+
+        } catch(IllegalArgumentException e){
+            log.error(e.getMessage(), e);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, null);
+        } catch(Exception e){
+            log.error(e.getMessage(), e);
+            responseData = new ResponseData<>(StatusCode.BAD_REQUEST, ResponseMessage.MEMBER_CREATION_FAIL, null);
+        }
+
+        return responseData;
     }
 
     @PostMapping("/token")
