@@ -1,13 +1,8 @@
 package dankook.capstone.petalk.service;
 
-import dankook.capstone.petalk.data.ResponseData;
-import dankook.capstone.petalk.data.ResponseMessage;
-import dankook.capstone.petalk.data.StatusCode;
 import dankook.capstone.petalk.dto.request.KakaoRequest;
 import dankook.capstone.petalk.dto.response.AuthResponse;
 import dankook.capstone.petalk.dto.response.MemberDto;
-import dankook.capstone.petalk.dto.response.OAuthResponse;
-import dankook.capstone.petalk.dto.response.SignUpResponse;
 import dankook.capstone.petalk.entity.Member;
 import dankook.capstone.petalk.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +28,7 @@ public class AuthService {
                 isUser = true;
             }
 
-            if(!isUser){
+            if(!isUser) {
                 Member member = request.toMemberEntity();
 
                 Long savedMemberId = memberService.join(member);
@@ -41,6 +36,12 @@ public class AuthService {
                 String token = jwtUtil.generateToken(savedMemberId, member.getPlatformId());
 
                 MemberDto memberDto = new MemberDto(member);
+
+                authResponse = new AuthResponse(token, memberDto);
+            }else{
+                String token = jwtUtil.generateToken(memberByPlatformId.getId(), memberByPlatformId.getPlatformId());
+
+                MemberDto memberDto = new MemberDto(memberByPlatformId);
 
                 authResponse = new AuthResponse(token, memberDto);
             }
