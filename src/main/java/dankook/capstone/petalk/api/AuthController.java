@@ -97,7 +97,7 @@ public class AuthController {
             if(!isUser) {
                 Member member = request.toMemberEntity();
 
-                Long savedMemberId = memberService.join(member);
+                Long savedMemberId = memberService.joinWithKakao(member);
 
                 String token = jwtUtil.generateToken(savedMemberId, member.getPlatformId());
 

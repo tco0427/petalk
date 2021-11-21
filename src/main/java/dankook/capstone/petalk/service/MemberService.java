@@ -21,6 +21,12 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
+    public Long joinWithKakao(Member member) {
+        memberRepository.save(member);
+        return member.getId();
+    }
+
+    @Transactional
     public Long join(Member member){
         validateDuplicateMember(member);    //중복 회원 검증
         String encodedPassword = passwordEncoder.encode(member.getPassword());  //비밀번호 암호화
