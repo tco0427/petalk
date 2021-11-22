@@ -5,6 +5,7 @@ import dankook.capstone.petalk.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +51,7 @@ public class CommunityService {
 //    }
 
     public Slice<Community> findAllBySlice(int page){
-        PageRequest pageRequest = PageRequest.of(page,5);
+        PageRequest pageRequest = PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         return communityRepository.findAllBy(pageRequest);
     }
