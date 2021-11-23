@@ -13,9 +13,9 @@ public class ResponseMessage {
     public static final String COMMENT_CREATION_FAIL = "댓글 생성 실패";
     public static final String NOT_FOUND_COMMENT = "댓글 조회 실패";
     public static final String FAIL_DELETE_COMMUNITY = "게시글 삭제 실패";
-    public static final String FAILED_TO_SAVE_VOTE = "투표 생성 실패";
     public static final String EXPIRED_TOKEN = "유효기간 만료된 토큰";
     public static final String INVALID_TOKEN = "유효하지 않은 토큰 정보";
     public static final String INVALID_HEADER = "잘못된 헤더 정보";
     public static final String FAILED_TO_LOGIN_KAKAO = "카카오 유저 생성 실패";
+    public static final String FAIL_DELETE_COMMENT = "댓글 삭제 실패";
 }

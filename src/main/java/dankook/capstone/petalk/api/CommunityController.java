@@ -85,9 +85,9 @@ public class CommunityController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            Long communityId = communityService.findOne(id).getId();
+            Long communityMemberId = communityService.findOne(id).getMember().getId();
 
-            communityService.checkMember(memberId, communityId);
+            communityService.checkMember(memberId, communityMemberId);
 
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteCommunityDto(id));
         }catch(IllegalAccessException e){

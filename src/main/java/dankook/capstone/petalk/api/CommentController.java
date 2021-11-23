@@ -78,7 +78,9 @@ public class CommentController {
             jwtUtil.isValidToken(token);
             Long memberId = jwtUtil.getMemberIdByToken(token);
 
-            commentService.checkMember(memberId, id);
+            Long commentMemberId = commentService.findOne(id).getMember().getId();
+
+            commentService.checkMember(memberId, commentMemberId);
 
             commentService.deleteById(id);
             responseData = new ResponseData<>(StatusCode.OK, ResponseMessage.SUCCESS, new DeleteCommentDto(id));
@@ -86,7 +88,7 @@ public class CommentController {
             responseData = new ResponseData<>(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_COMMENT, null);
         }catch(IllegalAccessException e) {
             log.error("IllegalAccessException", e);
-            responseData = new ResponseData<>(StatusCode.UNAUTHORIZED, ResponseMessage.FAIL_DELETE_COMMUNITY, null);
+            responseData = new ResponseData<>(StatusCode.UNAUTHORIZED, ResponseMessage.FAIL_DELETE_COMMENT, null);
         }
 
         return responseData;
