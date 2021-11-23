@@ -15,6 +15,8 @@ import static java.util.stream.Collectors.toList;
 public class CommunityDto {
     private Long id;
     private Long memberId;
+    private String nickname;
+    private String profileUrl;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private String writer;
@@ -23,6 +25,8 @@ public class CommunityDto {
     private List<CommentDto> commentList;
 
     public CommunityDto(Community community){
+        this.nickname = community.getMember().getNickname();
+        this.profileUrl = community.getMember().getProfileUrl();
         this.createdDate = community.getCreatedDate();
         this.memberId = community.getMember().getId();
         this.lastModifiedDate = community.getLastModifiedDate();
