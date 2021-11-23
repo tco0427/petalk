@@ -14,6 +14,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class CommunityDto {
     private Long id;
+    private Long memberId;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private String writer;
@@ -23,6 +24,7 @@ public class CommunityDto {
 
     public CommunityDto(Community community){
         this.createdDate = community.getCreatedDate();
+        this.memberId = community.getMember().getId();
         this.lastModifiedDate = community.getLastModifiedDate();
         this.id = community.getId();
         this.writer = community.getMember().getNickname();
