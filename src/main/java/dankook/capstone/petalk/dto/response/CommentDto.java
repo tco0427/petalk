@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class CommentDto {
+    private Long id;
     private Long memberId;
     private String nickname;
     private String profileUrl;
@@ -15,6 +16,7 @@ public class CommentDto {
     private String content;
 
     public CommentDto(Comment comment){
+        this.id = comment.getId();
         this.memberId = comment.getMember().getId();
         this.nickname = comment.getMember().getNickname();
         this.profileUrl = comment.getMember().getProfileUrl();
