@@ -89,6 +89,8 @@ public class CommunityController {
 
             communityService.checkMember(memberId, communityMemberId);
 
+            communityService.deleteById(id);
+
             responseData = new ResponseData<>(StatusCode.OK,ResponseMessage.SUCCESS,new DeleteCommunityDto(id));
         }catch(IllegalAccessException e){
             log.error("IllegalAccessException", e);
