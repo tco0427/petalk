@@ -32,7 +32,7 @@ UI디자인, android
 - 아래 개발 일정 계획 시 빠진 부분으로는 EC2, S3, RDS와 같은 `**인프라 구축**` 부분이 있는데 해당 부분은 9, 10월 초까지 진행되었습니다.
 - 현재(2021.12.1) 스토어 등록을 제외한 모든 부분에서 구현 및 배포가 완료된 상태입니다.
 
-![](../../Desktop/_2021-03-23__8.53.40.png)
+<img width="881" alt="_2021-03-23__8 53 40" src="https://user-images.githubusercontent.com/57028386/147993363-e31249eb-52e1-4585-9855-83f2374c6fee.png">
 
 ---
 
@@ -123,7 +123,7 @@ UI디자인, android
 
   (전체적인 개요이기 때문에 간단하게 나타내어 다음과 같지만 예를 들어 회원가입과 로그인의 경우에 **OAuth 2.0**을 적용하여 **JWT토큰**을 사용하는 등 실제로는 보다 복잡합니다.)
 
-  ![](../../Desktop/_2021-04-03__3.27.16.png)
+  <img width="1239" alt="ㅁㅁ" src="https://user-images.githubusercontent.com/57028386/147994517-6bdd12d1-0dca-4cc4-9a8b-f0d6d0f6a2b3.png">
 
   → **`Class Diagram`**
 
@@ -132,27 +132,27 @@ UI디자인, android
 
     → DB의 테이블과 1대1 매핑되는 "@Entity" 객체들에는 DB에서 더욱 원활하게 데이터를 관리하기 위해서 **실제 서버(Spring)단에는 BaseEntity(엔티티 생성 시 생성 날짜, 수정시 마지막 수정 날짜를 위해서)를 상속**하는 등 실제로 가지는 필드는 더 많거나 적습니다.
 
-    ![](../../Desktop/_2021-04-24__2.20.59.png)
+    <img width="1042" alt="0424" src="https://user-images.githubusercontent.com/57028386/147994530-7d59cc07-eeaa-45f1-9813-1dc1294e562c.png">
 
     → `**BaseEntity.java**`
 
-    ![](../../Desktop/BaseEntity.png)
+    <img width="418" alt="BaseEntity" src="https://user-images.githubusercontent.com/57028386/147994538-204392a5-485f-4890-856d-2c55cabcd4ad.png">
   
     → `**도메인 모델과 테이블 설계**`
     
     - (초기) 분석 단계에서 테이블 사이의 연관관계만을 고려하여 테이블을 설계하였던 모습
         
-        ![](../../Desktop/Untitled.png)
+        ![Untitled](https://user-images.githubusercontent.com/57028386/147994547-d591c36c-ae83-4b08-9a22-7bc2c32e5df0.png)
         
     - 이후 분석 → 설계 (분석 이후 설계 단계)에서는 다음과 같이 테이블의 컬럼까지 구체적으로 설계하였다.
     - 분석한 `감정` 과 사용자가 메모장에 입력한 `감정`을 비교하여 향후에 모델 업데이트에 사용할 수 있도록 영상 테이블과 메모장 테이블 사이에 관계를 추가해주었다.
         
-        ![](../../Desktop/_2021-04-24__1.39.44.png)
+        <img width="1202" alt="erd" src="https://user-images.githubusercontent.com/57028386/147994557-3ab95b2a-e3d3-4d70-89e9-fbd5cd41a07d.png">
         
     - 위의 E-R Diagram은 `개발 중간 단계`에서의 모습이고 향후에 개발을 진행하면서 `수정`을 하고 (ex. 각 테이블의 각각의 row에 대하여 created_date와 last_modified_date 를 반영하도록 해당 컬림들 `추가` ← 서버 운영 단계에서 매우 유용하기 때문에 추가), 불필요하다고 생각되는 기능들이나 컬럼에 대해서 `삭제`하여 업데이트 된 모습입니다.
     - 현재(2021.12.1) 실제 `AWS RDS에 올라가 있는 DB 테이블`의 모습입니다.
     
-        ![](../../Desktop/Untitle.png)
+        ![Untitle](https://user-images.githubusercontent.com/57028386/147994568-618e1061-d763-44c4-b914-9becb1ea8d83.png)
 
 
 - **컴포넌트별 기능 명세**
@@ -218,7 +218,7 @@ UI디자인, android
 
   → 두 DBMS의 가장 큰 차이점은 PostreSQL은 `멀티 프로세스 방식`이며, MariaDB는 `멀티쓰레드 방식`을 사용하고 있다는 것이다. 따라서 멀티 프로세스를 사용하는 PostgreSQL의 경우 복잡한 쿼리나 join처리 방식에서 더 뛰어난 성능을 보여준다.
 
-  ![](../../Desktop/aa.png)
+  <img width="788" alt="aa" src="https://user-images.githubusercontent.com/57028386/147994577-7ca0c3b1-fbec-468a-b94c-876998bcd6c7.png">
 
 - PostreSQL vs MySQL
 
@@ -252,7 +252,7 @@ UI디자인, android
 
 **초기 시스템 구상도**
 
-![](../../Desktop/aaaaa.png)
+<img width="666" alt="aaaaa" src="https://user-images.githubusercontent.com/57028386/147994586-07e9123a-d601-408b-81b0-8180cc446e49.png">
 
 ### 영상 업로드 시나리오
 
@@ -261,7 +261,7 @@ UI디자인, android
 3. WAS에서는 각종 비즈니스 로직을 처리합니다. (ex. front에서 요청된 비디오 처리(S3에 업로드 하고 관련 URL을 DB에 저장, 처리된 영상 결과물의 감정을 관련 row의 emotion 컬럼에 update 등)
 4. 최종적으로 WAS에서 front영역으로 데이터를 전송하여 사용자에게 결과가 전달된다.
 
-![](../../Desktop/abc.png)
+<img width="1129" alt="abc" src="https://user-images.githubusercontent.com/57028386/147994600-2ebb76dc-143e-4d7c-a590-2fa9e20f2167.png">
 
 - **위 그림은 초기 개발 단계에서 작성한 시스템 구상도여서 영상 데이터를 직접 DB에 저장하는 것으로 보이고 있지만 이는 매 DB 조회시 부담이 크기 때문에 별도의 AWS S3 버킷에 Object형태로 영상 데이터를 저장하고 이에 대한 URL만을 DB에 저장하는 방식으로 구성됩니다.**
 - Tensorflow를 구동하는 서버에서는 자원소모가 많이 발생하기 때문에 `DB 접근 및 사용자와의 상호작용`은 모두 `Application Server에서` 담당합니다. 감정 분석 이후 감정 데이터(문자열 약 10글자 미만) 만을 update 쿼리를 통해서 DB에 업데이트해줍니다.
@@ -273,7 +273,7 @@ UI디자인, android
 ### 다음은 최종적인 시스템 구상도의 모습입니다.
 Docker & Jenkins를 이용한 CI/CD 부분은 미완성입니다.
 
-![](../../Desktop/system.png)
+<img width="1761" alt="system" src="https://user-images.githubusercontent.com/57028386/147994605-d780ab15-15cc-413a-8667-6c209f31cc9f.png">
 
 ---
 
